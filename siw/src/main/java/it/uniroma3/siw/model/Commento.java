@@ -19,15 +19,58 @@ public class Commento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "utente_id", nullable = false)
-    private Utente utente;
+    private Utente autore;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "partita_id", nullable = false)
     private Partita partita;
-    
+
     // Metodo di callback JPA per impostare la data automaticamente
     @PrePersist
     protected void onCreate() {
         this.data = LocalDateTime.now();
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTesto() {
+        return testo;
+    }
+
+    public void setTesto(String testo) {
+        this.testo = testo;
+    }
+
+    public LocalDateTime getData() {
+        return data;
+    }
+
+    public void setData(LocalDateTime data) {
+        this.data = data;
+    }
+
+    public Utente getAutore() {
+        return autore;
+    }
+
+    public void setAutore(Utente autore) {
+        this.autore = autore;
+    }
+
+    public Partita getPartita() {
+        return partita;
+    }
+
+    public void setPartita(Partita partita) {
+        this.partita = partita;
+    }
+
+    
+
 }

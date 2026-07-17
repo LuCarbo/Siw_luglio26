@@ -32,4 +32,54 @@ public class Torneo {
 
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Partita> partite = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Integer getAnno() {
+        return anno;
+    }
+
+    public void setAnno(Integer anno) {
+        this.anno = anno;
+    }
+
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
+
+    public Set<Squadra> getSquadre() {
+        return squadre;
+    }
+
+    public void setSquadre(Set<Squadra> squadre) {
+        this.squadre = squadre;
+    }
+
+    public Set<Partita> getPartite() {
+        return partite;
+    }
+
+    public void setPartite(Set<Partita> partite) {
+        this.partite = partite;
+    }
+
+    
 }

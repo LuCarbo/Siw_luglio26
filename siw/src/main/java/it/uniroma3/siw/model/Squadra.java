@@ -27,4 +27,54 @@ public class Squadra {
 
     @OneToMany(mappedBy = "squadra", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Giocatore> giocatori = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Integer getAnnoFondazione() {
+        return annoFondazione;
+    }
+
+    public void setAnnoFondazione(Integer annoFondazione) {
+        this.annoFondazione = annoFondazione;
+    }
+
+    public String getCitta() {
+        return citta;
+    }
+
+    public void setCitta(String citta) {
+        this.citta = citta;
+    }
+
+    public Set<Torneo> getTornei() {
+        return tornei;
+    }
+
+    public void setTornei(Set<Torneo> tornei) {
+        this.tornei = tornei;
+    }
+
+    public Set<Giocatore> getGiocatori() {
+        return giocatori;
+    }
+
+    public void setGiocatori(Set<Giocatore> giocatori) {
+        this.giocatori = giocatori;
+    }
+
+    
 }
