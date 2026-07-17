@@ -36,6 +36,11 @@ public class ClassificaSquadra implements Comparable<ClassificaSquadra> {
 
     @Override
     public int compareTo(ClassificaSquadra altra) {
-        return Integer.compare(altra.getPunti(), this.punti);
+        int confrontoPunti = Integer.compare(altra.getPunti(), this.punti);
+        if (confrontoPunti != 0) {
+            return confrontoPunti;
+        }
+        // A parità di punti, ordina per nome squadra (evita problemi di ordinamento casuale)
+        return this.squadra.getNome().compareToIgnoreCase(altra.getSquadra().getNome());
     }
 }

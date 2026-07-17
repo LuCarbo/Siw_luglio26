@@ -44,7 +44,7 @@ public class RigaClassifica {
     // --- GETTER FONDAMENTALI PER THYMELEAF ---
     public Squadra getSquadra() { return squadra; }
     public int getPunti() { return punti; }
-//    public int getPartiteGiocate() { return partiteGiocate; }
+    public int getPartiteGiocate() { return partiteGiocate; }
     public int getVittorie() { return vittorie; }
     public int getPareggi() { return pareggi; }
     public int getSconfitte() { return sconfitte; }

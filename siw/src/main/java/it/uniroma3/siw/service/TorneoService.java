@@ -1,11 +1,13 @@
 package it.uniroma3.siw.service;
 
+import it.uniroma3.siw.model.ClassificaSquadra;
+import it.uniroma3.siw.model.Partita;
 import it.uniroma3.siw.model.Squadra;
 import it.uniroma3.siw.model.Torneo;
 import it.uniroma3.siw.repository.SquadraRepository;
 import it.uniroma3.siw.repository.TorneoRepository;
 
-import java.util.List;
+import java.util.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +52,44 @@ public class TorneoService {
             // ma con Hibernate l'owner della relazione (Torneo) è sufficiente per salvare il dato.
             torneoRepository.save(torneo);
         }
+    }
 
+    // --- CLASSIFICA ----
+    // IL CODICE ORA È CORRETTAMENTE RACCHIUSO IN UN METODO
+    public List<ClassificaSquadra> calcolaClassifica(Torneo torneo, List<Partita> partiteGiocate) {
+        
+        Map<Long, ClassificaSquadra> mappaClassifica = new HashMap<>();
+
+        // 1. Inizializza la mappa con tutte le squadre a zero punti
+        for (Squadra s : torneo.getSquadre()) {
+            mappaClassifica.put(s.getId(), new ClassificaSquadra(s));
+        }
+
+        // 2. Assegna i punti
+        for (Partita p : partiteGiocate) {
+            // Nota: Se i tuoi metodi in Partita.java si chiamano diversamente 
+            // (es. getSquadraHome e getSquadraAway), cambiali qui!
+            ClassificaSquadra casa = mappaClassifica.get(p.getSquadraCasa().getId());
+            ClassificaSquadra trasferta = mappaClassifica.get(p.getSquadraTrasferta().getId());
+
+            // Evita un NullPointerException se una squadra non è nella mappa
+            if (casa == null || trasferta == null) continue;
+
+            if (p.getGoalsHome() > p.getGoalsAway()) {
+                casa.aggiungiPunti(3);
+            } else if (p.getGoalsHome() < p.getGoalsAway()) {
+                trasferta.aggiungiPunti(3);
+            } else {
+                casa.aggiungiPunti(1);
+                trasferta.aggiungiPunti(1);
+            }
+        }
+
+        // 3. Converti in lista e ordina!
+        List<ClassificaSquadra> classificaFinale = new ArrayList<>(mappaClassifica.values());
+        Collections.sort(classificaFinale);
+        
+        return classificaFinale; // Restituisce la classifica calcolata al Controller
     }
     
     @Transactional

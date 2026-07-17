@@ -32,6 +32,14 @@ public class CommentoService {
         return commentoRepository.findByIdOrderByDataDesc(partitaId);
     }
 
+    @Transactional(readOnly = true) // Usiamo readOnly = true perché stiamo solo leggendo dal DB
+    public Commento findById(Long id) {
+        // Il repository restituisce un Optional<Commento>. 
+        // Usiamo orElseThrow per estrarre il commento o bloccare l'esecuzione se non c'è.
+        return commentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Nessun commento trovato con ID: " + id));
+    }
+
     // Operazione di SCRITTURA
     @Transactional
     public Commento aggiungiCommento(Long partitaId, Long utenteId, String testo) {
