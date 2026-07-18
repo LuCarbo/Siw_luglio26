@@ -1,32 +1,28 @@
 <!DOCTYPE html>
 <html lang="it" xmlns:th="http://www.thymeleaf.org">
 
-<!-- =========================================================================
-     FRAGMENT: head-comune
-     Da includere nelle altre pagine usando: 
-     <head th:replace="~{layout :: head-comune('Il Tuo Titolo')}"></head>
-     ========================================================================= -->
 <head th:fragment="head-comune(titolo)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- Titolo della pagina (dinamico) -->
     <title th:text="${titolo}">Titolo App</title>
-    
+
     <!-- Caricamento del tuo CSS personalizzato -->
     <link rel="stylesheet" th:href="@{/style.css}">
 
     <!-- Caricamento di Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Caricamento Font Inter (Google Fonts) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Eventuali stili di base globali aggiuntivi -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f3f4f6; /* Sfondo grigio chiaro usato in precedenza */
+            background-color: #f3f4f6;
+            /* Sfondo grigio chiaro usato in precedenza */
         }
     </style>
 </head>
@@ -39,19 +35,21 @@
          ========================================================================= -->
     <header th:fragment="headbar" class="navbar">
         <div class="navbar-content d-flex align-items-center justify-content-between">
-            <a th:href="@{/}" class="fw-bold" style="font-size: 1.5rem; text-decoration: none; color: white;">SIW Tornei</a>
-            
+            <a th:href="@{/}" class="fw-bold" style="font-size: 1.5rem; text-decoration: none; color: white;">SIW
+                Tornei</a>
+
             <div class="user-session d-flex align-items-center gap-15" style="color: white;">
                 <!-- Visibile soltanto a chi NON è autenticato -->
-                <a sec:authorize="isAnonymous()" th:href="@{/login}" class="btn text-center" style="background-color: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4);">
+                <a sec:authorize="isAnonymous()" th:href="@{/login}" class="btn text-center"
+                    style="background-color: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4);">
                     Accedi
                 </a>
-                
+
                 <!-- Visibile soltanto a chi è autenticato -->
                 <span sec:authorize="isAuthenticated()">
                     Benvenuto, <strong sec:authentication="name" style="color: white;">Utente</strong>!
                 </span>
-        
+
                 <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="margin: 0;">
                     <button type="submit" class="btn btn-danger text-center">Esci</button>
                 </form>
@@ -59,4 +57,5 @@
         </div>
     </header>
 </body>
+
 </html>

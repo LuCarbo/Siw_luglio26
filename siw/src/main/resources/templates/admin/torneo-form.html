@@ -32,7 +32,7 @@
 
             <div class="form-actions d-flex flex-wrap align-items-center gap-12 mt-20">
                 <button type="submit" class="btn btn-primary text-center">Salva Torneo</button>
-                <a th:href="@{/tornei}" class="btn btn-secondary text-center">Annulla</a>
+                <a th:href="${torneo.id != null} ? @{/torneo/{id}(id=${torneo.id})} : @{/tornei}" class="btn btn-secondary text-center">Annulla</a>
             </div>
         </form>
     </div>

@@ -25,20 +25,49 @@ public class AdminPartitaController {
 
     // 1. Mostra il form per pianificare una nuova partita
     @GetMapping("/nuova")
-    public String mostraFormNuovaPartita(Model model) {
+    public String mostraFormNuovaPartita(@RequestParam("torneoId") Long torneoId, Model model) {
         Partita partita = new Partita();
         partita.setStato(StatoPartita.SCHEDULED); // Di default è "da giocare"
         
+        it.uniroma3.siw.model.Torneo torneo = torneoService.findById(torneoId);
+        partita.setTorneo(torneo);
+        
         model.addAttribute("partita", partita);
-        model.addAttribute("squadre", squadraService.findAll());
-        model.addAttribute("tornei", torneoService.findAll());
+        model.addAttribute("squadre", torneo.getSquadre());
+        model.addAttribute("torneoCorrente", torneo);
+        
+        return "admin/partita-form";
+    }
+
+    // 1.5. Mostra il form per modificare una partita esistente
+    @GetMapping("/{id}/modifica")
+    public String mostraFormModificaPartita(@PathVariable("id") Long id, Model model) {
+        Partita partita = partitaService.findById(id);
+        
+        it.uniroma3.siw.model.Torneo torneo = partita.getTorneo();
+        
+        model.addAttribute("partita", partita);
+        model.addAttribute("squadre", torneo.getSquadre());
+        model.addAttribute("torneoCorrente", torneo);
         
         return "admin/partita-form";
     }
 
     // 2. Salva la nuova partita nel database
     @PostMapping("/salva")
-    public String salvaPartita(@ModelAttribute("partita") Partita partita) {
+    public String salvaPartita(@ModelAttribute("partita") Partita partita, Model model) {
+        
+        // Validazione: Squadra casa e trasferta non possono essere la stessa
+        if (partita.getSquadraCasa() != null && partita.getSquadraTrasferta() != null && 
+            partita.getSquadraCasa().getId().equals(partita.getSquadraTrasferta().getId())) {
+            
+            it.uniroma3.siw.model.Torneo torneo = partita.getTorneo();
+            model.addAttribute("erroreSquadre", "La squadra in casa non può essere uguale alla squadra in trasferta.");
+            model.addAttribute("squadre", torneo.getSquadre());
+            model.addAttribute("torneoCorrente", torneo);
+            return "admin/partita-form";
+        }
+        
         // Se i gol non sono inseriti, mettiamoli a 0 di default
         if(partita.getStato() == StatoPartita.SCHEDULED) {
             partita.setGoalsHome(0);

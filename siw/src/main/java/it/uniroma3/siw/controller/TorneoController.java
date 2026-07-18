@@ -6,6 +6,7 @@ import it.uniroma3.siw.model.Torneo;
 import it.uniroma3.siw.service.ClassificaService;
 import it.uniroma3.siw.service.PartitaService;
 import it.uniroma3.siw.service.TorneoService;
+import it.uniroma3.siw.service.SquadraService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +20,13 @@ public class TorneoController {
     private final TorneoService torneoService;
     private final PartitaService partitaService; 
     private final ClassificaService classificaService;
+    private final SquadraService squadraService;
 
-    public TorneoController(TorneoService torneoService, PartitaService partitaService, ClassificaService classificaService) {
+    public TorneoController(TorneoService torneoService, PartitaService partitaService, ClassificaService classificaService, SquadraService squadraService) {
         this.classificaService = classificaService;
         this.torneoService = torneoService;
         this.partitaService = partitaService;
+        this.squadraService = squadraService;
     }
 
     // 1. Rotta per la lista di tutti i tornei
@@ -46,6 +49,7 @@ public class TorneoController {
         model.addAttribute("torneo", torneo);
         model.addAttribute("partite", partite);
         model.addAttribute("classifica", classifica); // Passiamo la classifica all'HTML
+        model.addAttribute("squadreAll", squadraService.findAll()); // Passiamo tutte le squadre per la form di iscrizione
         
         return "torneo"; 
     }

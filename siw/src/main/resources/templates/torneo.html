@@ -35,10 +35,28 @@
         </section>
 
         <!-- Azioni disponibili solo agli amministratori -->
-        <section sec:authorize="hasAuthority('ADMIN')" class="admin-toolbar d-flex flex-wrap gap-12">
-            <a th:href="@{/admin/partita/nuova}" class="btn btn-primary text-center">
+        <section sec:authorize="hasAuthority('ADMIN')" class="admin-toolbar d-flex flex-wrap gap-12 align-items-center mb-30">
+            <a th:href="@{/admin/tornei/{id}/modifica(id=${torneo.id})}" class="btn btn-secondary text-center">
+                Modifica Torneo
+            </a>
+
+            <a th:href="@{/admin/tornei/{id}/elimina(id=${torneo.id})}" class="btn btn-danger text-center"
+               onclick="return confirm('Sei sicuro di voler eliminare questo torneo?');">
+                Elimina Torneo
+            </a>
+
+            <a th:href="@{/admin/partita/nuova(torneoId=${torneo.id})}" class="btn btn-primary text-center">
                 + Pianifica partita
             </a>
+
+            <!-- Form per iscrivere una nuova squadra al torneo -->
+            <form th:action="@{/admin/tornei/{id}/iscriviSquadra(id=${torneo.id})}" method="post" class="d-flex gap-12 align-items-center" style="margin: 0;">
+                <select name="squadraId" class="form-control" required style="min-width: 250px; margin: 0;">
+                    <option value="">-- Iscrivi Squadra al Torneo --</option>
+                    <option th:each="s : ${squadreAll}" th:value="${s.id}" th:text="${s.nome}"></option>
+                </select>
+                <button type="submit" class="btn btn-secondary" style="white-space: nowrap;">Iscrivi</button>
+            </form>
         </section>
 
         <!-- Classifica (Versione Step 1 - Solo Punti) -->
@@ -153,6 +171,11 @@
                     <!-- Azione disponibile solo agli amministratori -->
                     <div sec:authorize="hasAuthority('ADMIN')"
                          class="match-admin-actions mt-15">
+
+                        <a th:href="@{/admin/partita/{id}/modifica(id=${partita.id})}"
+                           class="btn btn-secondary" style="margin-right: 10px;">
+                            Modifica partita
+                        </a>
 
                         <a th:href="@{/admin/partita/{id}/elimina(id=${partita.id})}"
                            class="btn btn-danger"

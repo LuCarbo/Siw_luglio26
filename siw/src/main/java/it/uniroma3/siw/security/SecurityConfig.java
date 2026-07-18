@@ -13,46 +13,54 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-// METODO NUOVO: Dice a Spring Security di ignorare le risorse statiche
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
+
+    // METODO NUOVO: Dice a Spring Security di ignorare le risorse statiche
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(auth -> auth
-                // 1. ROTTE PUBBLICHE 
-                .requestMatchers(
-                        "/", 
-                        "/tornei", 
-                        "/torneo/**", 
-                        "/partita/**", 
-                        "/css/**", 
-                        "/js/**", 
-                        "/login", 
-                        "/api/esperimento",
-                        "/squadra/**",
-                        "/api/partite/**",
-                        "/api/giocatori/**", // <-- ECCO QUELLA CHE MANCAVA! Sblocca React
-                        "/style.css",
-                        "/*.css"
-                ).permitAll()
-                
-                // 2. ROTTE ADMIN
-                .requestMatchers("/admin/**").hasAuthority(RuoloUtente.ADMIN.name())
-                
-                // 3. TUTTO IL RESTO RICHIEDE IL LOGIN 
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login") 
-                .defaultSuccessUrl("/", true) 
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .permitAll()
-            )
-            // Disabilitiamo il CSRF (fondamentale per le chiamate React)
-            .csrf(csrf -> csrf.disable());
+                .authorizeHttpRequests(auth -> auth
+                        // 1. ROTTE PUBBLICHE
+                        .requestMatchers(
+                                "/",
+                                "/tornei",
+                                "/torneo/**",
+                                "/partita/**",
+                                "/css/**",
+                                "/js/**",
+                                "/login",
+                                "/api/esperimento",
+                                "/squadra/**",
+                                "/api/partite/**",
+                                "/api/giocatori/**", // <-- ECCO QUELLA CHE MANCAVA! Sblocca React
+                                "/style.css",
+                                "/*.css")
+                        .permitAll()
+
+                        // 2. ROTTE ADMIN
+                        .requestMatchers("/admin/**").hasAuthority(RuoloUtente.ADMIN.name())
+
+                        // 3. TUTTO IL RESTO RICHIEDE IL LOGIN
+                        .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .permitAll())
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService))
+                        .defaultSuccessUrl("/", true))
+                // Disabilitiamo il CSRF (fondamentale per le chiamate React)
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }

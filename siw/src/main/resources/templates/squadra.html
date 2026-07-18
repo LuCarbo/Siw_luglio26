@@ -66,6 +66,8 @@
         function RosaSquadra() {
             const [giocatori, setGiocatori] = React.useState([]);
             const [testoRicerca, setTestoRicerca] = React.useState("");
+            const [minAltezza, setMinAltezza] = React.useState("");
+            const [ordinamento, setOrdinamento] = React.useState("nomeAsc");
             const [caricamento, setCaricamento] = React.useState(true);
             const [errore, setErrore] = React.useState(false);
 
@@ -100,7 +102,29 @@
                 const nomeCompleto =
                     `${giocatore.nome} ${giocatore.cognome}`.toLowerCase();
 
-                return nomeCompleto.includes(ricerca);
+                const matchNome = nomeCompleto.includes(ricerca);
+
+                const altezzaGiocatore = giocatore.altezza || 0;
+                const altezzaMinima = parseFloat(minAltezza);
+                const matchAltezza = minAltezza === "" || isNaN(altezzaMinima) || altezzaGiocatore >= altezzaMinima;
+
+                return matchNome && matchAltezza;
+            });
+
+            // Ordinamento
+            giocatoriFiltrati.sort((a, b) => {
+                if (ordinamento === "nomeAsc") {
+                    return a.nome.localeCompare(b.nome);
+                } else if (ordinamento === "nomeDesc") {
+                    return b.nome.localeCompare(a.nome);
+                } else if (ordinamento === "altezzaAsc") {
+                    return (a.altezza || 0) - (b.altezza || 0);
+                } else if (ordinamento === "altezzaDesc") {
+                    return (b.altezza || 0) - (a.altezza || 0);
+                } else if (ordinamento === "ruolo") {
+                    return (a.ruolo || "").localeCompare(b.ruolo || "");
+                }
+                return 0;
             });
 
             if (caricamento) {
@@ -126,16 +150,38 @@
 
             return (
                 <div>
-                    <div className="search-box">
+                    <div className="search-box d-flex gap-12 align-items-center mb-20">
                         <input
                             type="search"
-                            className="search-input"
-                            placeholder={`Cerca un giocatore nel ${nomeSquadraAttuale}...`}
+                            className="search-input flex-1"
+                            placeholder={`Cerca per nome...`}
                             value={testoRicerca}
                             onChange={(event) =>
                                 setTestoRicerca(event.target.value)
                             }
                         />
+                        <input
+                            type="number"
+                            className="form-control"
+                            placeholder="Altezza min."
+                            style={{ maxWidth: '150px' }}
+                            value={minAltezza}
+                            onChange={(event) => setMinAltezza(event.target.value)}
+                            step="0.01"
+                            min="0"
+                        />
+                        <select
+                            className="form-control"
+                            value={ordinamento}
+                            onChange={(e) => setOrdinamento(e.target.value)}
+                            style={{ maxWidth: '200px' }}
+                        >
+                            <option value="nomeAsc">Nome (A-Z)</option>
+                            <option value="nomeDesc">Nome (Z-A)</option>
+                            <option value="altezzaDesc">Altezza (Decresc.)</option>
+                            <option value="altezzaAsc">Altezza (Cresc.)</option>
+                            <option value="ruolo">Ruolo</option>
+                        </select>
                     </div>
 
                     {giocatoriFiltrati.length > 0 ? (
@@ -145,6 +191,7 @@
                                     <th>Nome</th>
                                     <th>Cognome</th>
                                     <th>Ruolo</th>
+                                    <th>Altezza</th>
                                 </tr>
                             </thead>
 
@@ -154,6 +201,7 @@
                                         <td>{giocatore.nome}</td>
                                         <td>{giocatore.cognome}</td>
                                         <td>{giocatore.ruolo}</td>
+                                        <td>{giocatore.altezza ? giocatore.altezza : "-"}</td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -177,4 +225,5 @@
     </script>
 
 </body>
+
 </html>

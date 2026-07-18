@@ -14,6 +14,7 @@ public class Partita {
     private Long id;
 
     @Column(name = "data_ora", nullable = false)
+    @org.springframework.format.annotation.DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dataOra;
 
     private String luogo;

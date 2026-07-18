@@ -26,9 +26,9 @@ public class AdminTorneoController {
     // 2. SALVA IL TORNEO (Nuovo o Modificato)
     @PostMapping("/salva")
     public String salvaTorneo(@ModelAttribute("torneo") Torneo torneo) {
-        torneoService.save(torneo);
-        // Dopo il salvataggio, reindirizza alla lista pubblica dei tornei
-        return "redirect:/tornei"; 
+        Torneo savedTorneo = torneoService.save(torneo);
+        // Dopo il salvataggio, reindirizza al dettaglio del torneo
+        return "redirect:/torneo/" + savedTorneo.getId(); 
     }
 
     // 3. MOSTRA IL FORM PRE-COMPILATO PER LA MODIFICA
@@ -36,7 +36,7 @@ public class AdminTorneoController {
     public String mostraFormModifica(@PathVariable("id") Long id, Model model) {
         Torneo torneo = torneoService.findById(id);
         model.addAttribute("torneo", torneo);
-        return "admin/torneo";
+        return "admin/torneo-form";
     }
 
     // 4. ELIMINA UN TORNEO
@@ -44,5 +44,12 @@ public class AdminTorneoController {
     public String eliminaTorneo(@PathVariable("id") Long id) {
         torneoService.deleteById(id);
         return "redirect:/tornei";
+    }
+
+    // 5. ISCRIVI SQUADRA AL TORNEO
+    @PostMapping("/{id}/iscriviSquadra")
+    public String iscriviSquadra(@PathVariable("id") Long torneoId, @RequestParam("squadraId") Long squadraId) {
+        torneoService.iscriviSquadra(torneoId, squadraId);
+        return "redirect:/torneo/" + torneoId;
     }
 }

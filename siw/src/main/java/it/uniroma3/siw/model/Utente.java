@@ -1,6 +1,7 @@
 package it.uniroma3.siw.model;
 
 import it.uniroma3.siw.model.enums.RuoloUtente;
+import it.uniroma3.siw.model.enums.AuthProvider;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,12 +15,18 @@ public class Utente {
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password; 
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private RuoloUtente ruolo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AuthProvider provider = AuthProvider.LOCAL;
+
+    private String providerId;
 
     public Long getId() {
         return id;
@@ -53,5 +60,19 @@ public class Utente {
         this.ruolo = ruolo;
     }
 
-    
+    public AuthProvider getProvider() {
+        return provider;
+    }
+
+    public void setProvider(AuthProvider provider) {
+        this.provider = provider;
+    }
+
+    public String getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
 }

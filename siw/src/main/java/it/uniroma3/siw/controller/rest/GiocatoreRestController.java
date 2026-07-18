@@ -26,7 +26,8 @@ public class GiocatoreRestController {
                         g.getNome(),
                         g.getCognome(),
                         g.getRuolo(),
-                        g.getSquadra() != null ? g.getSquadra().getNome() : "Svincolato"
+                        g.getSquadra() != null ? g.getSquadra().getNome() : "Svincolato",
+                        g.getAltezza()
                 ))
                 .collect(Collectors.toList());
     }
@@ -40,13 +41,15 @@ public class GiocatoreRestController {
         public String cognome;
         public String ruolo;
         public String squadra;
+        public Double altezza;
 
-        public GiocatoreDTO(Long id, String nome, String cognome, String ruolo, String squadra) {
+        public GiocatoreDTO(Long id, String nome, String cognome, String ruolo, String squadra, Double altezza) {
             this.id = id;
             this.nome = nome;
             this.cognome = cognome;
             this.ruolo = ruolo;
             this.squadra = squadra;
+            this.altezza = altezza;
         }
     }
 }

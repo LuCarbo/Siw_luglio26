@@ -10,11 +10,39 @@
         </h1>
 
         <div class="form-container">
+            <!-- Alert per errore backend (se presente) -->
+            <div th:if="${erroreSquadre}" class="alert alert-danger" style="color: red; margin-bottom: 15px;" th:text="${erroreSquadre}"></div>
+            
             <form th:action="@{/admin/partita/salva}" th:object="${partita}" method="post">
                 <!-- Necessario nel caso si stia modificando una partita -->
                 <input type="hidden" th:field="*{id}">
-                <!-- Stato iniziale della partita, ad es. SCHEDULED -->
-                <input type="hidden" th:field="*{stato}">
+                <!-- Stato della partita -->
+                <div class="form-group mb-20">
+                    <label for="stato">Stato Partita</label>
+                    <select id="stato" class="form-control" th:field="*{stato}" required>
+                        <option value="SCHEDULED">Programmata</option>
+                        <option value="PLAYED">Giocata</option>
+                        <option value="POSTPONED">Rinviata</option>
+                        <option value="CANCELED">Cancellata</option>
+                    </select>
+                </div>
+
+                <div class="d-flex gap-12 mb-20">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="goalsHome">Gol Casa</label>
+                        <input type="number" id="goalsHome" class="form-control" th:field="*{goalsHome}" min="0">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="goalsAway">Gol Trasferta</label>
+                        <input type="number" id="goalsAway" class="form-control" th:field="*{goalsAway}" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group mb-20">
+                    <label>Torneo</label>
+                    <input type="text" class="form-control" th:value="${torneoCorrente.nome}" disabled>
+                    <input type="hidden" th:field="*{torneo}">
+                </div>
 
                 <div class="form-group mb-20">
                     <label for="squadraCasa">Squadra in casa</label>
@@ -48,6 +76,17 @@
                 </div>
             </form>
         </div>
+
+        <script>
+            document.querySelector('form').addEventListener('submit', function(e) {
+                var squadraCasa = document.getElementById('squadraCasa').value;
+                var squadraTrasferta = document.getElementById('squadraTrasferta').value;
+                if (squadraCasa && squadraTrasferta && squadraCasa === squadraTrasferta) {
+                    e.preventDefault();
+                    alert('Errore: La squadra in casa non può essere uguale alla squadra in trasferta.');
+                }
+            });
+        </script>
     </main>
 </body>
 </html>
