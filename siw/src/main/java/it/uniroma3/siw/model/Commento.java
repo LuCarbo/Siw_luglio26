@@ -3,6 +3,7 @@ package it.uniroma3.siw.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Base64;
 
 @Entity
 @Table(name = "commenti")
@@ -17,6 +18,10 @@ public class Commento {
 
     @Column(name = "data_creazione", nullable = false, updatable = false)
     private LocalDateTime dataCreazione;
+
+
+    @Column(columnDefinition = "BYTEA")
+    private byte[] immagine;
 
     // Relazione: un commento appartiene a un utente (autore)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,6 +38,26 @@ public class Commento {
     @PrePersist
     protected void onCreate() {
         this.dataCreazione = LocalDateTime.now();
+    }
+
+
+    // ----------- GETTER E SETTER -----------
+    
+    public byte[] getImmagine() {
+        return immagine;
+    }
+
+    public void setImmagine(byte[] immagine) {
+        this.immagine = immagine;
+    }
+
+    // --- METODO PER THYMELEAF ---
+    @Transient // Non viene salvato nel DB
+    public String getImmagineBase64() {
+        if (this.immagine != null && this.immagine.length > 0) {
+            return Base64.getEncoder().encodeToString(this.immagine);
+        }
+        return null;
     }
 
     public Long getId() {

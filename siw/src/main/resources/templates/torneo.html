@@ -39,11 +39,11 @@
             </a>
         </section>
 
-        <!-- Classifica -->
+        <!-- Classifica (Versione Step 1 - Solo Punti) -->
         <section class="tournament-section">
             <div class="section-heading">
                 <h2>Classifica</h2>
-                <span class="section-subtitle">Andamento delle squadre</span>
+                <span class="section-subtitle">Andamento delle squadre (Punteggio Base)</span>
             </div>
 
             <div class="table-wrapper">
@@ -53,20 +53,12 @@
                             <th scope="col">Pos.</th>
                             <th scope="col">Squadra</th>
                             <th scope="col">Pt</th>
-                            <th scope="col">G</th>
-                            <th scope="col">V</th>
-                            <th scope="col">P</th>
-                            <th scope="col">S</th>
-                            <th scope="col">GF</th>
-                            <th scope="col">GS</th>
-                            <th scope="col">DR</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr th:each="riga, iterStat : ${classifica}">
-                            <td class="standing-position"
-                                th:text="${iterStat.count}">
+                            <td class="standing-position" th:text="${iterStat.count}">
                                 1
                             </td>
 
@@ -77,18 +69,11 @@
                                 </a>
                             </td>
 
-                            <td class="standing-points"
+                            <td class="standing-points" 
+                                style="font-weight: bold; color: var(--primario);"
                                 th:text="${riga.punti}">
                                 0
                             </td>
-
-                            <td th:text="${riga.partiteGiocate}">0</td>
-                            <td th:text="${riga.vittorie}">0</td>
-                            <td th:text="${riga.pareggi}">0</td>
-                            <td th:text="${riga.sconfitte}">0</td>
-                            <td th:text="${riga.golFatti}">0</td>
-                            <td th:text="${riga.golSubiti}">0</td>
-                            <td th:text="${riga.differenzaReti}">0</td>
                         </tr>
                     </tbody>
                 </table>

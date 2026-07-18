@@ -1,6 +1,6 @@
 package it.uniroma3.siw.controller;
 
-import it.uniroma3.siw.dto.RigaClassifica;
+import it.uniroma3.siw.model.ClassificaSquadra;
 import it.uniroma3.siw.model.Partita;
 import it.uniroma3.siw.model.Torneo;
 import it.uniroma3.siw.service.ClassificaService;
@@ -41,7 +41,7 @@ public class TorneoController {
         List<Partita> partite = partitaService.findByTorneoId(id);
         
         // CHIAMIAMO LA LOGICA DI BUSINESS
-        List<RigaClassifica> classifica = classificaService.generaClassifica(id);
+        List<ClassificaSquadra> classifica = classificaService.generaClassifica(id);
         
         model.addAttribute("torneo", torneo);
         model.addAttribute("partite", partite);

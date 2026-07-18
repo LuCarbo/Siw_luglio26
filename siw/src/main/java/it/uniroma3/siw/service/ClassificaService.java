@@ -1,6 +1,6 @@
 package it.uniroma3.siw.service;
 
-import it.uniroma3.siw.dto.RigaClassifica;
+import it.uniroma3.siw.model.ClassificaSquadra;
 import it.uniroma3.siw.model.Partita;
 import it.uniroma3.siw.model.Torneo;
 import it.uniroma3.siw.model.enums.StatoPartita;
@@ -20,53 +20,54 @@ public class ClassificaService {
         this.partitaService = partitaService;
     }
 
-    public List<RigaClassifica> generaClassifica(Long torneoId) {
+    public List<ClassificaSquadra> generaClassifica(Long torneoId) {
         Torneo torneo = torneoService.findById(torneoId);
         List<Partita> partite = partitaService.findByTorneoId(torneoId);
 
-        Map<Long, RigaClassifica> mappaClassifica = new HashMap<>();
+        Map<Long, ClassificaSquadra> mappaClassifica = new HashMap<>();
 
-        // 1. Inizializziamo la classifica con le squadre del torneo (se la lista esiste)
+        // 1. Inizializziamo la classifica (tutti a 0 punti)
         if (torneo.getSquadre() != null) {
             torneo.getSquadre().forEach(squadra -> 
-                mappaClassifica.put(squadra.getId(), new RigaClassifica(squadra))
+                mappaClassifica.put(squadra.getId(), new ClassificaSquadra(squadra))
             );
         }
 
-        // 2. Leggiamo i risultati delle partite
+        // 2. Assegniamo SOLO i punti in base ai gol
         for (Partita p : partite) {
             if (p.getStato() == StatoPartita.PLAYED) {
                 
-                // DIFESA CONTRO L'ERRORE 500: Se la squadra non era iscritta al torneo, la aggiungiamo alla classifica ora!
-                mappaClassifica.putIfAbsent(p.getSquadraCasa().getId(), new RigaClassifica(p.getSquadraCasa()));
-                mappaClassifica.putIfAbsent(p.getSquadraTrasferta().getId(), new RigaClassifica(p.getSquadraTrasferta()));
+                mappaClassifica.putIfAbsent(p.getSquadraCasa().getId(), new ClassificaSquadra(p.getSquadraCasa()));
+                mappaClassifica.putIfAbsent(p.getSquadraTrasferta().getId(), new ClassificaSquadra(p.getSquadraTrasferta()));
 
-                RigaClassifica rigaCasa = mappaClassifica.get(p.getSquadraCasa().getId());
-                RigaClassifica rigaTrasferta = mappaClassifica.get(p.getSquadraTrasferta().getId());
+                ClassificaSquadra rigaCasa = mappaClassifica.get(p.getSquadraCasa().getId());
+                ClassificaSquadra rigaTrasferta = mappaClassifica.get(p.getSquadraTrasferta().getId());
 
                 int golCasa = p.getGoalsHome();
                 int golTrasferta = p.getGoalsAway();
 
                 if (golCasa > golTrasferta) {
-                    rigaCasa.aggiungiVittoria(golCasa, golTrasferta);
-                    rigaTrasferta.aggiungiSconfitta(golTrasferta, golCasa);
-                } else if (golCasa < golTrasferta) {
-                    rigaTrasferta.aggiungiVittoria(golTrasferta, golCasa);
-                    rigaCasa.aggiungiSconfitta(golCasa, golTrasferta);
-                } else {
-                    rigaCasa.aggiungiPareggio(golCasa);
-                    rigaTrasferta.aggiungiPareggio(golTrasferta);
+                    // La squadra in casa ha vinto: +3 punti
+                    rigaCasa.aggiungiPunti(3);
+                    // La squadra in trasferta ha perso: +0 punti (non facciamo nulla)
+                } 
+                else if (golCasa < golTrasferta) {
+                    // La squadra in trasferta ha vinto: +3 punti
+                    rigaTrasferta.aggiungiPunti(3);
+                } 
+                else {
+                    // Pareggio: +1 punto a testa
+                    rigaCasa.aggiungiPunti(1);
+                    rigaTrasferta.aggiungiPunti(1);
                 }
             }
         }
 
-        // 3. Convertiamo in lista e ordiniamo
-        List<RigaClassifica> classificaFinale = new ArrayList<>(mappaClassifica.values());
-        classificaFinale.sort((r1, r2) -> {
-            if (r1.getPunti() != r2.getPunti()) return Integer.compare(r2.getPunti(), r1.getPunti());
-            if (r1.getDifferenzaReti() != r2.getDifferenzaReti()) return Integer.compare(r2.getDifferenzaReti(), r1.getDifferenzaReti());
-            return Integer.compare(r2.getGolFatti(), r1.getGolFatti());
-        });
+        // 3. Estraiamo i valori dalla mappa e li ordiniamo
+        List<ClassificaSquadra> classificaFinale = new ArrayList<>(mappaClassifica.values());
+        
+        // Questo comando usa il tuo metodo "compareTo" per mettere i punteggi in ordine decrescente
+        Collections.sort(classificaFinale);
 
         return classificaFinale;
     }

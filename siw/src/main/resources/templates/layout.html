@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<!-- =========================================================================
+     FRAGMENT: head-comune
+     Da includere nelle altre pagine usando: 
+     <head th:replace="~{layout :: head-comune('Il Tuo Titolo')}"></head>
+     ========================================================================= -->
+<head th:fragment="head-comune(titolo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Titolo della pagina (dinamico) -->
+    <title th:text="${titolo}">Titolo App</title>
+    
+    <!-- Caricamento del tuo CSS personalizzato -->
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <!-- Caricamento di Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Caricamento Font Inter (Google Fonts) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Eventuali stili di base globali aggiuntivi -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Sfondo grigio chiaro usato in precedenza */
+        }
+    </style>
+</head>
+
+<body>
+
+    
+</body>
+</html>
