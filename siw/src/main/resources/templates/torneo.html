@@ -15,15 +15,17 @@
 </head>
 
 <body>
+    <header th:replace="~{layout :: headbar}"></header>
+
 
     <main class="container">
 
-        <a th:href="@{/tornei}" class="back-link">
+        <a th:href="@{/tornei}" class="btn btn-secondary d-inline-flex align-items-center mb-25">
             ← Torna all'elenco tornei
         </a>
 
         <!-- Intestazione torneo -->
-        <section class="tournament-header">
+        <section class="tournament-header mb-30">
             <h1 th:text="${torneo.nome}">Nome torneo</h1>
 
             <p class="tournament-description"
@@ -33,15 +35,15 @@
         </section>
 
         <!-- Azioni disponibili solo agli amministratori -->
-        <section sec:authorize="hasAuthority('ADMIN')" class="admin-toolbar">
-            <a th:href="@{/admin/partita/nuova}" class="btn btn-primary">
+        <section sec:authorize="hasAuthority('ADMIN')" class="admin-toolbar d-flex flex-wrap gap-12">
+            <a th:href="@{/admin/partita/nuova}" class="btn btn-primary text-center">
                 + Pianifica partita
             </a>
         </section>
 
         <!-- Classifica (Versione Step 1 - Solo Punti) -->
         <section class="tournament-section">
-            <div class="section-heading">
+            <div class="section-heading d-flex align-items-baseline justify-content-between gap-15 mb-10">
                 <h2>Classifica</h2>
                 <span class="section-subtitle">Andamento delle squadre (Punteggio Base)</span>
             </div>
@@ -83,12 +85,12 @@
         <!-- Calendario -->
         <section class="tournament-section">
 
-            <div class="section-heading">
+            <div class="section-heading d-flex align-items-baseline justify-content-between gap-15 mb-10">
                 <h2>Calendario partite</h2>
                 <span class="section-subtitle">Risultati e incontri programmati</span>
             </div>
 
-            <div th:if="${#lists.isEmpty(partite)}" class="empty-state">
+            <div th:if="${#lists.isEmpty(partite)}" class="empty-state text-center">
                 <h3>Calendario non disponibile</h3>
                 <p>Il calendario non è ancora stato generato.</p>
             </div>
@@ -111,9 +113,9 @@
                         </span>
                     </div>
 
-                    <div class="match-content">
+                    <div class="match-content d-flex align-items-center justify-content-between gap-20">
 
-                        <div class="match-teams">
+                        <div class="match-teams align-items-center gap-20">
 
                             <a th:href="@{/squadra/{id}(id=${partita.squadraCasa.id})}"
                                class="team-link"
@@ -142,7 +144,7 @@
                         </div>
 
                         <a th:href="@{/partita/{id}(id=${partita.id})}"
-                           class="btn btn-primary match-detail-link">
+                           class="btn btn-primary text-center">
                             Dettagli e commenti
                         </a>
 
@@ -150,10 +152,10 @@
 
                     <!-- Azione disponibile solo agli amministratori -->
                     <div sec:authorize="hasAuthority('ADMIN')"
-                         class="match-admin-actions">
+                         class="match-admin-actions mt-15">
 
                         <a th:href="@{/admin/partita/{id}/elimina(id=${partita.id})}"
-                           class="delete-link"
+                           class="btn btn-danger"
                            onclick="return confirm('Sei sicuro di voler eliminare questa partita?');">
                             Elimina partita
                         </a>

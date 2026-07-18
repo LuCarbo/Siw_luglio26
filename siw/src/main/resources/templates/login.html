@@ -7,6 +7,8 @@
     <link rel="stylesheet" th:href="@{/style.css}">
 </head> 
 <body>
+    <header th:replace="~{layout :: headbar}"></header>
+
 
     <!-- Usiamo la classe .login-container del nuovo CSS -->
     <div class="login-container">
@@ -22,15 +24,15 @@
 
         <!-- Form con le nuove classi CSS -->
         <form th:action="@{/login}" method="post">
-            <div class="form-group">
+            <div class="form-group mb-20">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" class="form-control" required autofocus>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-20">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" class="form-control" required>
             </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%;">Entra</button>
+            <button type="submit" class="btn btn-primary text-center" style="width: 100%; margin-top: 20px;">Entra</button>
         </form>
     </div>
 

@@ -33,6 +33,30 @@
 
 <body>
 
-    
+    <!-- =========================================================================
+         FRAGMENT: headbar
+         Navbar globale da includere in cima ad ogni <body>
+         ========================================================================= -->
+    <header th:fragment="headbar" class="navbar">
+        <div class="navbar-content d-flex align-items-center justify-content-between">
+            <a th:href="@{/}" class="fw-bold" style="font-size: 1.5rem; text-decoration: none; color: white;">SIW Tornei</a>
+            
+            <div class="user-session d-flex align-items-center gap-15" style="color: white;">
+                <!-- Visibile soltanto a chi NON è autenticato -->
+                <a sec:authorize="isAnonymous()" th:href="@{/login}" class="btn text-center" style="background-color: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4);">
+                    Accedi
+                </a>
+                
+                <!-- Visibile soltanto a chi è autenticato -->
+                <span sec:authorize="isAuthenticated()">
+                    Benvenuto, <strong sec:authentication="name" style="color: white;">Utente</strong>!
+                </span>
+        
+                <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="margin: 0;">
+                    <button type="submit" class="btn btn-danger text-center">Esci</button>
+                </form>
+            </div>
+        </div>
+    </header>
 </body>
 </html>

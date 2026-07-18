@@ -48,6 +48,10 @@ public class Partita {
     @JoinColumn(name = "arbitro_id")
     private Arbitro arbitro;
 
+    // Relazione con Commenti (per eliminazione a cascata)
+    @OneToMany(mappedBy = "partita", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Commento> commenti;
+
     public Long getId() {
         return id;
     }

@@ -18,10 +18,12 @@
 </head>
 
 <body>
+    <header th:replace="~{layout :: headbar}"></header>
+
 
     <main class="container">
 
-        <a th:href="@{/tornei}" class="back-link">
+        <a th:href="@{/tornei}" class="btn btn-secondary d-inline-flex align-items-center mb-25">
             ← Torna ai tornei
         </a>
 

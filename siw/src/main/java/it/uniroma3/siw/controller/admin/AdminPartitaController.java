@@ -51,7 +51,9 @@ public class AdminPartitaController {
     // 3. Elimina una partita
     @GetMapping("/{id}/elimina")
     public String eliminaPartita(@PathVariable("id") Long id) {
+        Partita partita = partitaService.findById(id);
+        Long torneoId = partita.getTorneo().getId();
         partitaService.deleteById(id);
-        return "redirect:/tornei"; 
+        return "redirect:/torneo/" + torneoId; 
     }
 }

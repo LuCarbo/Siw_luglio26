@@ -1,22 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="it">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title th:text="${giocatore.id == null ? 'Nuovo Giocatore' : 'Modifica Giocatore'}">
-        Gestione Giocatore
-    </title>
-
-    <link rel="stylesheet" th:href="@{/style.css}">
-</head>
+<head th:replace="~{layout :: head-comune(${giocatore.id == null ? 'Nuovo Giocatore' : 'Modifica Giocatore'})}"></head>
 
 <body>
+    <header th:replace="~{layout :: headbar}"></header>
+
 
     <main class="container">
 
-        <a th:href="@{/tornei}" class="back-link">
+        <a th:href="@{/tornei}" class="btn btn-secondary d-inline-flex align-items-center mb-25">
             ← Torna all'elenco tornei
         </a>
 
@@ -33,7 +26,7 @@
                 <!-- Necessario per modificare un giocatore esistente -->
                 <input type="hidden" th:field="*{id}">
 
-                <div class="form-group">
+                <div class="form-group mb-20">
                     <label for="nome">Nome</label>
                     <input type="text"
                            id="nome"
@@ -43,7 +36,7 @@
                            autofocus>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group mb-20">
                     <label for="cognome">Cognome</label>
                     <input type="text"
                            id="cognome"
@@ -52,7 +45,7 @@
                            required>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group mb-20">
                     <label for="dataNascita">Data di nascita</label>
                     <input type="date"
                            id="dataNascita"
@@ -60,7 +53,7 @@
                            th:field="*{dataNascita}">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group mb-20">
                     <label for="ruolo">Ruolo</label>
                     <input type="text"
                            id="ruolo"
@@ -69,7 +62,7 @@
                            placeholder="Es. Portiere, Difensore, Attaccante">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group mb-20">
                     <label for="altezza">Altezza (cm)</label>
                     <input type="number"
                            id="altezza"
@@ -80,7 +73,7 @@
                            placeholder="Es. 182.5">
                 </div>
 
-                <div class="form-group">
+                <div class="form-group mb-20">
                     <label for="squadra">Squadra di appartenenza</label>
 
                     <select id="squadra"
@@ -100,12 +93,12 @@
                     </select>
                 </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">
+                <div class="form-actions d-flex flex-wrap align-items-center gap-12 mt-20">
+                    <button type="submit" class="btn btn-primary text-center">
                         Salva giocatore
                     </button>
 
-                    <a th:href="@{/tornei}" class="back-link">
+                    <a th:href="@{/tornei}" class="btn btn-secondary text-center">
                         Annulla
                     </a>
                 </div>
