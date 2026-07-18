@@ -5,8 +5,6 @@ import it.uniroma3.siw.model.Torneo;
 import it.uniroma3.siw.repository.SquadraRepository;
 import it.uniroma3.siw.repository.TorneoRepository;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +20,7 @@ public class TorneoService {
         this.squadraRepository = squadraRepository;
     }
 
-    public List<Torneo> findAll() {
+    public Iterable<Torneo> findAll() {
         return torneoRepository.findAll();
     }
 
@@ -36,7 +34,7 @@ public class TorneoService {
     }
 
     // --- LOGICA DI BUSINESS ---
-    
+
     @Transactional // Se una delle due operazioni fallisce, non viene salvato nulla
     public void iscriviSquadra(Long torneoId, Long squadraId) {
         Torneo torneo = findById(torneoId);
@@ -46,13 +44,15 @@ public class TorneoService {
         // Aggiungiamo la squadra alla lista del torneo
         if (!torneo.getSquadre().contains(squadra)) {
             torneo.getSquadre().add(squadra);
-            // La squadra.getTornei().add(torneo) si aggiornerebbe in automatico se crei un metodo helper, 
-            // ma con Hibernate l'owner della relazione (Torneo) è sufficiente per salvare il dato.
+            // La squadra.getTornei().add(torneo) si aggiornerebbe in automatico se crei un
+            // metodo helper,
+            // ma con Hibernate l'owner della relazione (Torneo) è sufficiente per salvare
+            // il dato.
             torneoRepository.save(torneo);
         }
 
     }
-    
+
     @Transactional
     public void deleteById(Long id) {
         torneoRepository.deleteById(id);

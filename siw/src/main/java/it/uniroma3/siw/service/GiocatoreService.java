@@ -4,7 +4,6 @@ import it.uniroma3.siw.model.Giocatore;
 import it.uniroma3.siw.repository.GiocatoreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.*;
 
 @Service
 public class GiocatoreService {
@@ -25,10 +24,10 @@ public class GiocatoreService {
         giocatoreRepository.deleteById(id);
     }
 
-    public List<Giocatore> findAll() {
+    public Iterable<Giocatore> findAll() {
         return giocatoreRepository.findAll();
     }
-    
+
     @Transactional(readOnly = true)
     public Giocatore findById(Long id) {
         return giocatoreRepository.findById(id).orElseThrow(() -> new RuntimeException("Giocatore non trovato"));

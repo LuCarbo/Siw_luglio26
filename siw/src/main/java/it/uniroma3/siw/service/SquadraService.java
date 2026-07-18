@@ -5,8 +5,6 @@ import it.uniroma3.siw.model.Squadra;
 import it.uniroma3.siw.repository.GiocatoreRepository;
 import it.uniroma3.siw.repository.SquadraRepository;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +19,7 @@ public class SquadraService {
         this.giocatoreRepository = giocatoreRepository;
     }
 
-    public List<Squadra> findAll() {
+    public Iterable<Squadra> findAll() {
         return squadraRepository.findAll();
     }
 
@@ -39,18 +37,17 @@ public class SquadraService {
     @Transactional
     public Giocatore aggiungiGiocatore(Long squadraId, Giocatore nuovoGiocatore) {
         Squadra squadra = findById(squadraId);
-        
+
         // Collega il giocatore alla squadra
         nuovoGiocatore.setSquadra(squadra);
-        
-        
+
         // Salva il giocatore (Hibernate lo aggiungerà anche alla lista della squadra)
         return giocatoreRepository.save(nuovoGiocatore);
     }
 
     @Transactional
     public void deleteById(Long id) {
-    squadraRepository.deleteById(id);
+        squadraRepository.deleteById(id);
     }
-    
+
 }

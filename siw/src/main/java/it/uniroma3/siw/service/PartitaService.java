@@ -39,7 +39,7 @@ public class PartitaService {
     
     @Transactional(readOnly = true)
     public void eseguiTestLazy() {
-        List<Partita> partite = partitaRepository.findAll();
+        Iterable<Partita> partite = partitaRepository.findAll();
         // Simuliamo l'accesso ai dati che avverrebbe nella vista Thymeleaf o in React
         for (Partita p : partite) {
             p.getSquadraCasa().getNome();

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.util.stream.StreamSupport;
+
 @RestController
 @RequestMapping("/api/giocatori")
 @CrossOrigin(origins = "*") // Permette a React di leggere i dati
@@ -20,7 +22,7 @@ public class GiocatoreRestController {
     @GetMapping
     public List<GiocatoreDTO> getAllGiocatori() {
         // Recupera tutti i giocatori dal DB e li trasforma in un formato leggero per React
-        return giocatoreService.findAll().stream()
+        return StreamSupport.stream(giocatoreService.findAll().spliterator(), false)
                 .map(g -> new GiocatoreDTO(
                         g.getId(),
                         g.getNome(),
