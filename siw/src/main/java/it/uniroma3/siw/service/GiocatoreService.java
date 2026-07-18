@@ -4,7 +4,7 @@ import it.uniroma3.siw.model.Giocatore;
 import it.uniroma3.siw.repository.GiocatoreRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.*;
 
 @Service
 public class GiocatoreService {
@@ -23,6 +23,10 @@ public class GiocatoreService {
     @Transactional
     public void deleteById(Long id) {
         giocatoreRepository.deleteById(id);
+    }
+
+    public List<Giocatore> findAll() {
+        return giocatoreRepository.findAll();
     }
     
     @Transactional(readOnly = true)

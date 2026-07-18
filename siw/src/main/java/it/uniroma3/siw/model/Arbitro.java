@@ -1,23 +1,29 @@
 package it.uniroma3.siw.model;
 
+
 import jakarta.persistence.*;
+import java.util.*;
 
 @Entity
 @Table(name = "arbitri")
 public class Arbitro {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String cognome;
 
-    @Column(name = "codice_arbitrale", nullable = false, unique = true)
+    @Column(name = "codice_arbitrale", unique = true, nullable = false)
     private String codiceArbitrale;
+
+    // Relazione con Partita
+    @OneToMany(mappedBy = "arbitro")
+    private List<Partita> partiteDirette = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -49,6 +55,14 @@ public class Arbitro {
 
     public void setCodiceArbitrale(String codiceArbitrale) {
         this.codiceArbitrale = codiceArbitrale;
+    }
+
+    public List<Partita> getPartiteDirette() {
+        return partiteDirette;
+    }
+
+    public void setPartiteDirette(List<Partita> partiteDirette) {
+        this.partiteDirette = partiteDirette;
     }
 
     

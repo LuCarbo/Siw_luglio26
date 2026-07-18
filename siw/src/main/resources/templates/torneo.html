@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${torneo.nome} + ' - Torneo'">
+        Dettaglio Torneo
+    </title>
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <a th:href="@{/tornei}" class="back-link">
+            ← Torna all'elenco tornei
+        </a>
+
+        <!-- Intestazione torneo -->
+        <section class="tournament-header">
+            <h1 th:text="${torneo.nome}">Nome torneo</h1>
+
+            <p class="tournament-description"
+               th:text="${torneo.descrizione}">
+                Descrizione del torneo
+            </p>
+        </section>
+
+        <!-- Azioni disponibili solo agli amministratori -->
+        <section sec:authorize="hasAuthority('ADMIN')" class="admin-toolbar">
+            <a th:href="@{/admin/partita/nuova}" class="btn btn-primary">
+                + Pianifica partita
+            </a>
+        </section>
+
+        <!-- Classifica -->
+        <section class="tournament-section">
+            <div class="section-heading">
+                <h2>Classifica</h2>
+                <span class="section-subtitle">Andamento delle squadre</span>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="standing-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Pos.</th>
+                            <th scope="col">Squadra</th>
+                            <th scope="col">Pt</th>
+                            <th scope="col">G</th>
+                            <th scope="col">V</th>
+                            <th scope="col">P</th>
+                            <th scope="col">S</th>
+                            <th scope="col">GF</th>
+                            <th scope="col">GS</th>
+                            <th scope="col">DR</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr th:each="riga, iterStat : ${classifica}">
+                            <td class="standing-position"
+                                th:text="${iterStat.count}">
+                                1
+                            </td>
+
+                            <td class="standing-team">
+                                <a th:href="@{/squadra/{id}(id=${riga.squadra.id})}"
+                                   th:text="${riga.squadra.nome}">
+                                    Squadra
+                                </a>
+                            </td>
+
+                            <td class="standing-points"
+                                th:text="${riga.punti}">
+                                0
+                            </td>
+
+                            <td th:text="${riga.partiteGiocate}">0</td>
+                            <td th:text="${riga.vittorie}">0</td>
+                            <td th:text="${riga.pareggi}">0</td>
+                            <td th:text="${riga.sconfitte}">0</td>
+                            <td th:text="${riga.golFatti}">0</td>
+                            <td th:text="${riga.golSubiti}">0</td>
+                            <td th:text="${riga.differenzaReti}">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Calendario -->
+        <section class="tournament-section">
+
+            <div class="section-heading">
+                <h2>Calendario partite</h2>
+                <span class="section-subtitle">Risultati e incontri programmati</span>
+            </div>
+
+            <div th:if="${#lists.isEmpty(partite)}" class="empty-state">
+                <h3>Calendario non disponibile</h3>
+                <p>Il calendario non è ancora stato generato.</p>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(partite)}" class="matches-list">
+
+                <article th:each="partita : ${partite}"
+                         class="match-card"
+                         th:classappend="${partita.stato.name() == 'PLAYED'} ? ' played' : ' scheduled'">
+
+                    <div class="match-meta">
+                        <span th:text="${#temporals.format(partita.dataOra, 'dd/MM/yyyy HH:mm')}">
+                            Data
+                        </span>
+
+                        <span class="match-separator">•</span>
+
+                        <span th:text="${partita.luogo}">
+                            Luogo
+                        </span>
+                    </div>
+
+                    <div class="match-content">
+
+                        <div class="match-teams">
+
+                            <a th:href="@{/squadra/{id}(id=${partita.squadraCasa.id})}"
+                               class="team-link"
+                               th:text="${partita.squadraCasa.nome}">
+                                Squadra casa
+                            </a>
+
+                            <span th:if="${partita.stato.name() == 'PLAYED'}"
+                                  class="score">
+                                <span th:text="${partita.goalsHome}">0</span>
+                                -
+                                <span th:text="${partita.goalsAway}">0</span>
+                            </span>
+
+                            <span th:unless="${partita.stato.name() == 'PLAYED'}"
+                                  class="match-versus">
+                                VS
+                            </span>
+
+                            <a th:href="@{/squadra/{id}(id=${partita.squadraTrasferta.id})}"
+                               class="team-link"
+                               th:text="${partita.squadraTrasferta.nome}">
+                                Squadra trasferta
+                            </a>
+
+                        </div>
+
+                        <a th:href="@{/partita/{id}(id=${partita.id})}"
+                           class="btn btn-primary match-detail-link">
+                            Dettagli e commenti
+                        </a>
+
+                    </div>
+
+                    <!-- Azione disponibile solo agli amministratori -->
+                    <div sec:authorize="hasAuthority('ADMIN')"
+                         class="match-admin-actions">
+
+                        <a th:href="@{/admin/partita/{id}/elimina(id=${partita.id})}"
+                           class="delete-link"
+                           onclick="return confirm('Sei sicuro di voler eliminare questa partita?');">
+                            Elimina partita
+                        </a>
+
+                    </div>
+
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

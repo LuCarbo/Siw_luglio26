@@ -12,5 +12,5 @@ public interface CommentoRepository extends CrudRepository<Commento, Long> {
     
     // Se vuoi i commenti ordinati dal più recente al più vecchio (opzionale ma consigliato):
     // Usa "DataCreazione" tutto attaccato (camelCase), senza underscore!
-    List<Commento> findByIdOrderByDataDesc(Long partitaId);
+    List<Commento> findByPartitaOrderByDataCreazioneDesc(Partita partita);
 }

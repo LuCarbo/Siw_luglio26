@@ -1,11 +1,11 @@
 package it.uniroma3.siw.controller;
 
-import it.uniroma3.siw.model.Commento;
 import it.uniroma3.siw.model.Utente;
 import it.uniroma3.siw.service.CommentoService;
-import it.uniroma3.siw.service.UtenteService; // Aggiunto per recuperare l'utente
+// Se usi CredentialsService importalo qui e cambialo nel costruttore
+import it.uniroma3.siw.repository.UtenteRepository; 
+
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -14,63 +14,61 @@ import java.security.Principal;
 public class CommentoController {
 
     private final CommentoService commentoService;
-    private final UtenteService utenteService;
+    private final UtenteRepository utenteRepository; 
 
-    public CommentoController(CommentoService commentoService, UtenteService utenteService) {
+    public CommentoController(CommentoService commentoService, UtenteRepository utenteRepository) {
         this.commentoService = commentoService;
-        this.utenteService = utenteService;
+        this.utenteRepository = utenteRepository;
     }
 
-    // ==============================================
-    // 1. INSERIMENTO NUOVO COMMENTO
-    // ==============================================
-    @PostMapping("/partite/{partitaId}/commenti")
-    public String aggiungiCommento(
-            @PathVariable Long partitaId, 
-            @RequestParam("testo") String testo,
-            Principal principal) {
-            
-        // 1. Recupero l'utente loggato in modo sicuro tramite il suo username
-        Utente autore = utenteService.findByUsername(principal.getName());
+    /* =========================================================================
+     * 1. INSERIMENTO DI UN NUOVO COMMENTO
+     * ========================================================================= */
+    @PostMapping("/partita/{id}/commento")
+    public String aggiungiCommento(@PathVariable("id") Long partitaId, 
+                                   @RequestParam("testo") String testo, 
+                                   Principal principal) {
         
-        // 2. Passo l'ID dell'utente al service (lavoriamo per ID come hai chiesto)
-        commentoService.aggiungiCommento(partitaId, autore.getId(), testo);
-        
-        return "redirect:/partite/" + partitaId; 
-    }
-
-    // ==============================================
-    // 2. MOSTRA IL FORM DI MODIFICA
-    // ==============================================
-    @GetMapping("/commenti/{commentoId}/modifica")
-    public String mostraFormModifica(@PathVariable Long commentoId, Model model, Principal principal) {
-        
-        Commento commento = commentoService.findById(commentoId);
-        Utente utenteLoggato = utenteService.findByUsername(principal.getName());
-
-        // Controllo di sicurezza: confrontiamo l'ID dell'autore con l'ID dell'utente loggato
-        if (!commento.getAutore().getId().equals(utenteLoggato.getId())) {
-            return "redirect:/"; // Non sei l'autore, ti sbatto fuori
+        if (principal != null) {
+            Utente utenteLoggato = recuperaUtenteLoggato(principal);
+            if (utenteLoggato != null) {
+                commentoService.aggiungiCommento(partitaId, utenteLoggato.getId(), testo);
+            }
         }
-
-        model.addAttribute("commento", commento);
-        return "formModificaCommento";
+        
+        // Torna alla pagina della partita
+        return "redirect:/partita/" + partitaId;
     }
 
-    // ==============================================
-    // 3. SALVATAGGIO DELLA MODIFICA
-    // ==============================================
-    @PostMapping("/commenti/{commentoId}/modifica")
-    public String salvaModificaCommento(
-            @PathVariable Long commentoId,
-            @RequestParam("testo") String nuovoTesto,
-            Principal principal) {
-            
-        // Recupero di nuovo l'ID dell'utente per validare la richiesta nel service
-        Utente utenteLoggato = utenteService.findByUsername(principal.getName());
-            
-        Commento commentoAggiornato = commentoService.modificaCommento(commentoId, utenteLoggato.getId(), nuovoTesto);
+    /* =========================================================================
+     * 2. MODIFICA DI UN COMMENTO ESISTENTE
+     * ========================================================================= */
+    @PostMapping("/partita/{partitaId}/commento/{commentoId}/modifica")
+    public String modificaCommento(@PathVariable("partitaId") Long partitaId, 
+                                   @PathVariable("commentoId") Long commentoId,
+                                   @RequestParam("nuovoTesto") String nuovoTesto, 
+                                   Principal principal) {
         
-        return "redirect:/partite/" + commentoAggiornato.getPartita().getId();
+        if (principal != null) {
+            Utente utenteLoggato = recuperaUtenteLoggato(principal);
+            if (utenteLoggato != null) {
+                commentoService.modificaCommento(commentoId, utenteLoggato.getId(), nuovoTesto);
+            }
+        }
+        
+        return "redirect:/partita/" + partitaId;
+    }
+
+    /* =========================================================================
+     * METODO PRIVATO DI SUPPORTO: RECUPERA L'UTENTE DAL PRINCIPAL
+     * ========================================================================= */
+    private Utente recuperaUtenteLoggato(Principal principal) {
+        // Se usi la ricerca diretta nel repository:
+        return utenteRepository.findByUsername(principal.getName()).orElse(null);
+        
+        /* 
+         * Se usi il CredentialsService:
+         * return credentialsService.getCredentials(principal.getName()).getUtente();
+         */
     }
 }

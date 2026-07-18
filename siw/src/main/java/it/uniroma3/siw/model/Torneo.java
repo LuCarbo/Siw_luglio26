@@ -1,37 +1,39 @@
 package it.uniroma3.siw.model;
 
-import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import jakarta.persistence.*; // Se usi Spring Boot 3.x (altrimenti usa javax.persistence.* per Spring Boot 2.x)
+import java.util.*;
+
 
 @Entity
 @Table(name = "tornei")
 public class Torneo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String nome;
 
     @Column(nullable = false)
     private Integer anno;
 
-    @Column(length = 500)
+    @Column(columnDefinition = "TEXT")
     private String descrizione;
 
-    // Torneo è l'owner della relazione N:M
-    @ManyToMany(fetch = FetchType.LAZY)
+    //Relazione con Squadre
+    @ManyToMany
     @JoinTable(
-        name = "tornei_squadre",
-        joinColumns = @JoinColumn(name = "torneo_id"),
+        name = "torneo_squadra", 
+        joinColumns = @JoinColumn(name = "torneo_id"), 
         inverseJoinColumns = @JoinColumn(name = "squadra_id")
     )
-    private Set<Squadra> squadre = new HashSet<>();
+    private List<Squadra> squadre = new ArrayList<>();
 
-    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Partita> partite = new HashSet<>();
+    // Relazione con Partita
+    @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)
+    private List<Partita> partite = new ArrayList<>();
+
 
     public Long getId() {
         return id;
@@ -65,19 +67,19 @@ public class Torneo {
         this.descrizione = descrizione;
     }
 
-    public Set<Squadra> getSquadre() {
+    public List<Squadra> getSquadre() {
         return squadre;
     }
 
-    public void setSquadre(Set<Squadra> squadre) {
+    public void setSquadre(List<Squadra> squadre) {
         this.squadre = squadre;
     }
 
-    public Set<Partita> getPartite() {
+    public List<Partita> getPartite() {
         return partite;
     }
 
-    public void setPartite(Set<Partita> partite) {
+    public void setPartite(List<Partita> partite) {
         this.partite = partite;
     }
 

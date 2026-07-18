@@ -1,32 +1,40 @@
 package it.uniroma3.siw.model;
 
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "squadre")
 public class Squadra {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String nome;
 
     @Column(name = "anno_fondazione")
     private Integer annoFondazione;
 
-    @Column(nullable = false)
+    @Column(length = 100)
     private String citta;
 
-    // Relazione bidirezionale gestita da Torneo
-    @ManyToMany(mappedBy = "squadre", fetch = FetchType.LAZY)
-    private Set<Torneo> tornei = new HashSet<>();
+    // Lato inverso della relazione con Torneo
+    @ManyToMany(mappedBy = "squadre")
+    private List<Torneo> tornei = new ArrayList<>();
 
-    @OneToMany(mappedBy = "squadra", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Giocatore> giocatori = new HashSet<>();
+    // Relazione con Giocatore
+    @OneToMany(mappedBy = "squadra", cascade = CascadeType.ALL)
+    private List<Giocatore> giocatori = new ArrayList<>();
+
+    // Relazione con le partite giocate in casa
+    @OneToMany(mappedBy = "squadraCasa")
+    private List<Partita> partiteInCasa = new ArrayList<>();
+
+    // Relazione con le partite giocate in trasferta
+    @OneToMany(mappedBy = "squadraTrasferta")
+    private List<Partita> partiteInTrasferta = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -60,21 +68,38 @@ public class Squadra {
         this.citta = citta;
     }
 
-    public Set<Torneo> getTornei() {
-        return tornei;
-    }
-
-    public void setTornei(Set<Torneo> tornei) {
-        this.tornei = tornei;
-    }
-
-    public Set<Giocatore> getGiocatori() {
+    public List<Giocatore> getGiocatori() {
         return giocatori;
     }
 
-    public void setGiocatori(Set<Giocatore> giocatori) {
+    public void setGiocatori(List<Giocatore> giocatori) {
         this.giocatori = giocatori;
     }
 
+    public List<Torneo> getTornei() {
+        return tornei;
+    }
+
+    public void setTornei(List<Torneo> tornei) {
+        this.tornei = tornei;
+    }
+
+    public List<Partita> getPartiteInCasa() {
+        return partiteInCasa;
+    }
+
+    public void setPartiteInCasa(List<Partita> partiteInCasa) {
+        this.partiteInCasa = partiteInCasa;
+    }
+
+    public List<Partita> getPartiteInTrasferta() {
+        return partiteInTrasferta;
+    }
+
+    public void setPartiteInTrasferta(List<Partita> partiteInTrasferta) {
+        this.partiteInTrasferta = partiteInTrasferta;
+    }
+
+    
     
 }

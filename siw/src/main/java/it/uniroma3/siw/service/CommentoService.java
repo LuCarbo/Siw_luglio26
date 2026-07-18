@@ -28,16 +28,8 @@ public class CommentoService {
 
     // Operazione di SOLA LETTURA (ottimizzazione delle performance richiesta al punto 7)
     @Transactional(readOnly = true)
-    public List<Commento> findByPartitaId(Long partitaId) {
-        return commentoRepository.findByIdOrderByDataDesc(partitaId);
-    }
-
-    @Transactional(readOnly = true) // Usiamo readOnly = true perché stiamo solo leggendo dal DB
-    public Commento findById(Long id) {
-        // Il repository restituisce un Optional<Commento>. 
-        // Usiamo orElseThrow per estrarre il commento o bloccare l'esecuzione se non c'è.
-        return commentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Nessun commento trovato con ID: " + id));
+    public List<Commento> findByPartitaId(Partita partita) {
+        return commentoRepository.findByPartitaOrderByDataCreazioneDesc(partita);
     }
 
     // Operazione di SCRITTURA

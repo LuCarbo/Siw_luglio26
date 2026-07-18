@@ -1,6 +1,5 @@
 package it.uniroma3.siw.model;
 
-import it.uniroma3.siw.model.enums.*;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -9,27 +8,25 @@ import java.time.LocalDate;
 public class Giocatore {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String cognome;
 
     @Column(name = "data_nascita")
     private LocalDate dataNascita;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private RuoloGiocatore ruolo;
+    @Column(length = 30)
+    private String ruolo;
 
     private Double altezza;
 
-    // Fondamentale esplicitare LAZY per prevenire il caricamento automatico della squadra
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "squadra_id", nullable = false)
+    @JoinColumn(name = "squadra_id")
     private Squadra squadra;
 
     public Long getId() {
@@ -64,11 +61,11 @@ public class Giocatore {
         this.dataNascita = dataNascita;
     }
 
-    public RuoloGiocatore getRuolo() {
+    public String getRuolo() {
         return ruolo;
     }
 
-    public void setRuolo(RuoloGiocatore ruolo) {
+    public void setRuolo(String ruolo) {
         this.ruolo = ruolo;
     }
 

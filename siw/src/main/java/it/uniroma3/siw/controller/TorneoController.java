@@ -1,7 +1,7 @@
 package it.uniroma3.siw.controller;
 
+import it.uniroma3.siw.dto.RigaClassifica;
 import it.uniroma3.siw.model.Partita;
-import it.uniroma3.siw.model.RigaClassifica;
 import it.uniroma3.siw.model.Torneo;
 import it.uniroma3.siw.service.ClassificaService;
 import it.uniroma3.siw.service.PartitaService;
@@ -27,11 +27,11 @@ public class TorneoController {
     }
 
     // 1. Rotta per la lista di tutti i tornei
-    @GetMapping("/tornei")
-    public String showTornei(Model model) {
-        List<Torneo> tornei = torneoService.findAll();
-        model.addAttribute("tornei", tornei);
-        return "tornei"; 
+    @GetMapping({"/", "/tornei"})
+    public String getTornei(Model model) {
+        // ... il tuo codice esistente per recuperare i tornei ...
+        model.addAttribute("tornei", torneoService.findAll());
+        return "tornei"; // o il nome del tuo file html
     }
 
     // 2. UNICO METODO per mostrare il dettaglio del torneo e il suo calendario
@@ -49,6 +49,5 @@ public class TorneoController {
         
         return "torneo"; 
     }
-
 
 }

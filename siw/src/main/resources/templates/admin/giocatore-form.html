@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${giocatore.id == null ? 'Nuovo Giocatore' : 'Modifica Giocatore'}">
+        Gestione Giocatore
+    </title>
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <a th:href="@{/tornei}" class="back-link">
+            ← Torna all'elenco tornei
+        </a>
+
+        <h1 th:text="${giocatore.id == null ? 'Nuovo Giocatore' : 'Modifica Giocatore'}">
+            Gestione Giocatore
+        </h1>
+
+        <div class="form-container">
+
+            <form th:action="@{/admin/giocatori/salva}"
+                  th:object="${giocatore}"
+                  method="post">
+
+                <!-- Necessario per modificare un giocatore esistente -->
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text"
+                           id="nome"
+                           class="form-control"
+                           th:field="*{nome}"
+                           required
+                           autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="cognome">Cognome</label>
+                    <input type="text"
+                           id="cognome"
+                           class="form-control"
+                           th:field="*{cognome}"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dataNascita">Data di nascita</label>
+                    <input type="date"
+                           id="dataNascita"
+                           class="form-control"
+                           th:field="*{dataNascita}">
+                </div>
+
+                <div class="form-group">
+                    <label for="ruolo">Ruolo</label>
+                    <input type="text"
+                           id="ruolo"
+                           class="form-control"
+                           th:field="*{ruolo}"
+                           placeholder="Es. Portiere, Difensore, Attaccante">
+                </div>
+
+                <div class="form-group">
+                    <label for="altezza">Altezza (cm)</label>
+                    <input type="number"
+                           id="altezza"
+                           class="form-control"
+                           th:field="*{altezza}"
+                           step="0.1"
+                           min="0"
+                           placeholder="Es. 182.5">
+                </div>
+
+                <div class="form-group">
+                    <label for="squadra">Squadra di appartenenza</label>
+
+                    <select id="squadra"
+                            class="form-control"
+                            th:field="*{squadra}"
+                            required>
+
+                        <option value="">
+                            -- Seleziona una squadra --
+                        </option>
+
+                        <option th:each="sq : ${squadre}"
+                                th:value="${sq.id}"
+                                th:text="${sq.nome}">
+                            Nome squadra
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        Salva giocatore
+                    </button>
+
+                    <a th:href="@{/tornei}" class="back-link">
+                        Annulla
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

@@ -1,22 +1,21 @@
 package it.uniroma3.siw.model;
 
-import it.uniroma3.siw.model.enums.*;
+import it.uniroma3.siw.model.enums.RuoloUtente;
 import jakarta.persistence.*;
-
 
 @Entity
 @Table(name = "utenti")
 public class Utente {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
     @Column(nullable = false)
-    private String password;
+    private String password; 
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

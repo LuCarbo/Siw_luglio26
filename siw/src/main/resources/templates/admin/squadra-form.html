@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${squadra.id == null ? 'Nuova Squadra' : 'Modifica Squadra'}">
+        Gestione Squadra
+    </title>
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <a th:href="@{/tornei}" class="back-link">
+            ← Torna all'elenco tornei
+        </a>
+
+        <h1 th:text="${squadra.id == null ? 'Nuova Squadra' : 'Modifica Squadra'}">
+            Gestione Squadra
+        </h1>
+
+        <div class="form-container">
+            <form th:action="@{/admin/squadre/salva}"
+                  th:object="${squadra}"
+                  method="post">
+
+                <!-- Necessario per riconoscere la squadra da modificare -->
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-group">
+                    <label for="nome">Nome della squadra</label>
+                    <input type="text"
+                           id="nome"
+                           class="form-control"
+                           th:field="*{nome}"
+                           required
+                           autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="citta">Città</label>
+                    <input type="text"
+                           id="citta"
+                           class="form-control"
+                           th:field="*{citta}"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="annoFondazione">Anno di fondazione</label>
+                    <input type="number"
+                           id="annoFondazione"
+                           class="form-control"
+                           th:field="*{annoFondazione}"
+                           min="1800"
+                           max="2100">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        Salva squadra
+                    </button>
+
+                    <a th:href="@{/tornei}" class="back-link">
+                        Annulla
+                    </a>
+                </div>
+
+            </form>
+        </div>
+
+    </main>
+
+</body>
+</html>

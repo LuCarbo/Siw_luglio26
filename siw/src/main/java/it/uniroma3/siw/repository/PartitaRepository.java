@@ -2,6 +2,7 @@ package it.uniroma3.siw.repository;
 
 import it.uniroma3.siw.model.Partita;
 import it.uniroma3.siw.model.enums.StatoPartita;
+
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 

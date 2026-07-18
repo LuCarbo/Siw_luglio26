@@ -1,4 +1,6 @@
-package it.uniroma3.siw.model;
+package it.uniroma3.siw.dto;
+
+import it.uniroma3.siw.model.Squadra;
 
 public class RigaClassifica {
     private Squadra squadra;

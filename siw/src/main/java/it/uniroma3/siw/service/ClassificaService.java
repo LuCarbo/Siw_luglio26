@@ -1,9 +1,10 @@
 package it.uniroma3.siw.service;
 
-import it.uniroma3.siw.model.RigaClassifica;
+import it.uniroma3.siw.dto.RigaClassifica;
 import it.uniroma3.siw.model.Partita;
-import it.uniroma3.siw.model.enums.StatoPartita;
 import it.uniroma3.siw.model.Torneo;
+import it.uniroma3.siw.model.enums.StatoPartita;
+
 import org.springframework.stereotype.Service;
 
 import java.util.*;

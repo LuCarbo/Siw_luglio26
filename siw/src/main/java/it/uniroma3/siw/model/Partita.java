@@ -1,23 +1,21 @@
 package it.uniroma3.siw.model;
 
-import it.uniroma3.siw.model.enums.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+
+import it.uniroma3.siw.model.enums.StatoPartita;
 
 @Entity
 @Table(name = "partite")
 public class Partita {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(name = "data_ora", nullable = false)
     private LocalDateTime dataOra;
 
-    @Column(nullable = false)
     private String luogo;
 
     @Column(name = "goals_home")
@@ -28,27 +26,27 @@ public class Partita {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private StatoPartita stato;
+    private StatoPartita stato = StatoPartita.SCHEDULED;
 
-    // Relazioni (Tutte LAZY)
+    // Relazione con Torneo
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "torneo_id", nullable = false)
     private Torneo torneo;
 
+    // Relazione con Squadra in casa
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "squadra_casa_id", nullable = false)
     private Squadra squadraCasa;
 
+    // Relazione con Squadra in trasferta
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "squadra_trasferta_id", nullable = false)
     private Squadra squadraTrasferta;
 
+    // Relazione con Arbitro
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "arbitro_id", nullable = false)
+    @JoinColumn(name = "arbitro_id")
     private Arbitro arbitro;
-
-    @OneToMany(mappedBy = "partita", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Commento> commenti = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -128,14 +126,6 @@ public class Partita {
 
     public void setArbitro(Arbitro arbitro) {
         this.arbitro = arbitro;
-    }
-
-    public Set<Commento> getCommenti() {
-        return commenti;
-    }
-
-    public void setCommenti(Set<Commento> commenti) {
-        this.commenti = commenti;
     }
 
     

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title th:text="|${squadra.nome} - Dettaglio Squadra|">
+        Dettaglio Squadra
+    </title>
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+
+    <!-- React 18 + ReactDOM + Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+
+    <main class="container">
+
+        <a th:href="@{/tornei}" class="back-link">
+            ← Torna ai tornei
+        </a>
+
+        <h1 th:text="${squadra.nome}">Nome squadra</h1>
+
+        <section class="card">
+            <p>
+                <strong>Città:</strong>
+                <span th:text="${squadra.citta}">Città</span>
+            </p>
+
+            <p>
+                <strong>Anno di fondazione:</strong>
+                <span th:text="${squadra.annoFondazione}">Anno</span>
+            </p>
+        </section>
+
+        <h2>Rosa giocatori</h2>
+
+        <!-- Thymeleaf inserisce qui il nome effettivo della squadra -->
+        <script th:inline="javascript">
+            const nomeSquadraAttuale = /*[[${squadra.nome}]]*/ 'Nome Squadra';
+        </script>
+
+        <!-- React inserisce qui la barra di ricerca e la tabella -->
+        <div id="react-giocatori">
+            <p>Caricamento giocatori in corso...</p>
+        </div>
+
+    </main>
+
+    <!--
+        Questo script NON deve essere analizzato da Thymeleaf:
+        contiene JSX di React, che altrimenti verrebbe interpretato
+        erroneamente come HTML.
+    -->
+    <script type="text/babel" th:inline="none">
+        /*<![CDATA[*/
+
+        function RosaSquadra() {
+            const [giocatori, setGiocatori] = React.useState([]);
+            const [testoRicerca, setTestoRicerca] = React.useState("");
+            const [caricamento, setCaricamento] = React.useState(true);
+            const [errore, setErrore] = React.useState(false);
+
+            React.useEffect(() => {
+                fetch("/api/giocatori")
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Impossibile caricare i giocatori");
+                        }
+
+                        return response.json();
+                    })
+                    .then(dati => {
+                        const giocatoriSquadra = dati.filter(
+                            giocatore => giocatore.squadra === nomeSquadraAttuale
+                        );
+
+                        setGiocatori(giocatoriSquadra);
+                    })
+                    .catch(error => {
+                        console.error("Errore di caricamento:", error);
+                        setErrore(true);
+                    })
+                    .finally(() => {
+                        setCaricamento(false);
+                    });
+            }, []);
+
+            const ricerca = testoRicerca.trim().toLowerCase();
+
+            const giocatoriFiltrati = giocatori.filter(giocatore => {
+                const nomeCompleto =
+                    `${giocatore.nome} ${giocatore.cognome}`.toLowerCase();
+
+                return nomeCompleto.includes(ricerca);
+            });
+
+            if (caricamento) {
+                return <p>Caricamento rosa in corso...</p>;
+            }
+
+            if (errore) {
+                return (
+                    <p>
+                        Non è stato possibile caricare la rosa.
+                        Riprova più tardi.
+                    </p>
+                );
+            }
+
+            if (giocatori.length === 0) {
+                return (
+                    <p>
+                        Nessun giocatore registrato per questa squadra.
+                    </p>
+                );
+            }
+
+            return (
+                <div>
+                    <div className="search-box">
+                        <input
+                            type="search"
+                            className="search-input"
+                            placeholder={`Cerca un giocatore nel ${nomeSquadraAttuale}...`}
+                            value={testoRicerca}
+                            onChange={(event) =>
+                                setTestoRicerca(event.target.value)
+                            }
+                        />
+                    </div>
+
+                    {giocatoriFiltrati.length > 0 ? (
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Cognome</th>
+                                    <th>Ruolo</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {giocatoriFiltrati.map(giocatore => (
+                                    <tr key={giocatore.id}>
+                                        <td>{giocatore.nome}</td>
+                                        <td>{giocatore.cognome}</td>
+                                        <td>{giocatore.ruolo}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <p>
+                            Nessun giocatore trovato per la ricerca:
+                            <strong> {testoRicerca}</strong>.
+                        </p>
+                    )}
+                </div>
+            );
+        }
+
+        const contenitore = document.getElementById("react-giocatori");
+        const root = ReactDOM.createRoot(contenitore);
+
+        root.render(<RosaSquadra />);
+
+        /*]]>*/
+    </script>
+
+</body>
+</html>

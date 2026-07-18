@@ -1,5 +1,6 @@
 package it.uniroma3.siw.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -8,27 +9,30 @@ import java.time.LocalDateTime;
 public class Commento {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String testo;
 
-    @Column(nullable = false)
-    private LocalDateTime data;
+    @Column(name = "data_creazione", nullable = false, updatable = false)
+    private LocalDateTime dataCreazione;
 
+    // Relazione: un commento appartiene a un utente (autore)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "utente_id", nullable = false)
     private Utente autore;
 
+    // Relazione: un commento è riferito a una specifica partita
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "partita_id", nullable = false)
     private Partita partita;
 
-    // Metodo di callback JPA per impostare la data automaticamente
+    // Metodo eseguito automaticamente da Hibernate prima di salvare nel DB per la prima volta
     @PrePersist
     protected void onCreate() {
-        this.data = LocalDateTime.now();
+        this.dataCreazione = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -47,12 +51,12 @@ public class Commento {
         this.testo = testo;
     }
 
-    public LocalDateTime getData() {
-        return data;
+    public LocalDateTime getDataCreazione() {
+        return dataCreazione;
     }
 
-    public void setData(LocalDateTime data) {
-        this.data = data;
+    public void setDataCreazione(LocalDateTime dataCreazione) {
+        this.dataCreazione = dataCreazione;
     }
 
     public Utente getAutore() {
@@ -72,5 +76,4 @@ public class Commento {
     }
 
     
-
 }
