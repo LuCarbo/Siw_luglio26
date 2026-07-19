@@ -13,8 +13,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
@@ -83,9 +82,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         GrantedAuthority authority = new SimpleGrantedAuthority(utente.getRuolo().name());
 
+        Map<String, Object> attributes = new java.util.HashMap<>(oAuth2User.getAttributes());
+        attributes.put("name", name);
+
         return new DefaultOAuth2User(
                 Collections.singletonList(authority),
-                oAuth2User.getAttributes(),
+                attributes,
                 "name" // Usa 'name' come chiave principale così sec:authentication="name" mostra il
                        // nome!
         );
