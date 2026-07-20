@@ -128,11 +128,19 @@ public class DataInitializer implements CommandLineRunner {
             t2.getSquadre().add(sq2);
             t2.getSquadre().add(sq3);
 
+            Torneo tSperimentale = new Torneo();
+            tSperimentale.setNome("Torneo Sperimentale JPA");
+            tSperimentale.setAnno(2026);
+            tSperimentale.setDescrizione("Torneo con 200 partite per testare le prestazioni JPA.");
+            tSperimentale.getSquadre().add(sq1);
+            tSperimentale.getSquadre().add(sq2);
+            tSperimentale.getSquadre().add(sq3);
+
             torneoRepository.save(t1);
             torneoRepository.save(t2);
+            torneoRepository.save(tSperimentale);
 
-
-            // 3. Generazione di 20 Partite per l'esperimento N+1
+            // 3. Generazione di 20 Partite per i tornei standard
             System.out.println("Generazione di 20 partite di test...");
             Random random = new Random();
             Squadra[] squadre = {sq1, sq2, sq3};
@@ -161,6 +169,20 @@ public class DataInitializer implements CommandLineRunner {
                     p.setStato(StatoPartita.SCHEDULED);
                 }
                 
+                partitaRepository.save(p);
+            }
+
+            // 4. Generazione di 200 Partite per l'esperimento N+1 nel Torneo Sperimentale
+            System.out.println("Generazione di 200 partite per il Torneo Sperimentale...");
+            for (int i = 1; i <= 200; i++) {
+                Partita p = new Partita();
+                p.setTorneo(tSperimentale);
+                int idxCasa = i % 3;
+                int idxTrasferta = (i + 1) % 3;
+                p.setSquadraCasa(squadre[idxCasa]);
+                p.setSquadraTrasferta(squadre[idxTrasferta]);
+                p.setDataOra(LocalDateTime.now().plusDays(i));
+                p.setStato(StatoPartita.SCHEDULED);
                 partitaRepository.save(p);
             }
 
