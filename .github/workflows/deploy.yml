@@ -48,7 +48,9 @@ jobs:
           DATABASE_URL: jdbc:postgresql://localhost:5432/tornei
           GOOGLE_CLIENT_ID: dummy-client-id
           GOOGLE_CLIENT_SECRET: dummy-client-secret
-        run: ./mvnw clean package
+        run: |
+          chmod +x mvnw
+          ./mvnw clean package
         
       - name: Set up flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
