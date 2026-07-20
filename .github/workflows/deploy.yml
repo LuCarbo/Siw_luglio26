@@ -10,6 +10,22 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     
+    # Avvia un database PostgreSQL per far passare i test
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: tornei
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     defaults:
       run:
         working-directory: ./siw
@@ -26,6 +42,10 @@ jobs:
           cache: maven
       
       - name: Build and Test with Maven
+        env:
+          DATABASE_USERNAME: postgres
+          DATABASE_PASSWORD: password
+          DATABASE_URL: jdbc:postgresql://localhost:5432/tornei
         run: ./mvnw clean package
         
       - name: Set up flyctl

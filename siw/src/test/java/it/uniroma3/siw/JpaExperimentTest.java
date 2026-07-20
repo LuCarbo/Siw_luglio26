@@ -31,11 +31,12 @@ public class JpaExperimentTest {
     @BeforeEach
     public void findTorneoTestId() {
         // Cerca il Torneo Sperimentale creato dal DataInitializer
-        java.util.List<Torneo> tornei = torneoRepository.findByNomeContainingIgnoreCase("Sperimentale");
+        java.util.List<Torneo> tornei = torneoRepository.findByNomeContainingIgnoreCase("TEST");
         if (!tornei.isEmpty()) {
             torneoIdTest = tornei.get(0).getId();
         } else {
-            throw new RuntimeException("Torneo 'Sperimentale' non trovato! Assicurati che il DataInitializer sia stato eseguito e il DB contenga i dati.");
+            throw new RuntimeException(
+                    "Torneo 'Sperimentale' non trovato! Assicurati che il DataInitializer sia stato eseguito e il DB contenga i dati.");
         }
     }
 
@@ -61,7 +62,7 @@ public class JpaExperimentTest {
         System.out.println(String.format("%-25s | %d ms", "2. JOIN FETCH", timeJoinFetch));
         System.out.println(String.format("%-25s | %d ms", "3. ENTITY GRAPH", timeEntityGraph));
         System.out.println("=======================================================\n");
-        
+
         System.out.println("DISCUSSIONE E ANALISI DEI RISULTATI:");
         System.out.println("-------------------------------------------------------");
         System.out.println("L'esperimento dimostra chiaramente il problema 'N+1 Selects' intrinseco");
@@ -78,7 +79,8 @@ public class JpaExperimentTest {
         System.out.println("utilizzando JOIN SQL. Recuperano il Torneo, le Partite e le rispettive Squadre");
         System.out.println("tutto in una singola andata e ritorno (round-trip) verso il DB. Come mostrato");
         System.out.println("dai risultati, queste strategie risultano molto più veloci ed efficienti per");
-        System.out.println("scenari di lettura intensiva in cui è noto anticipatamente di aver bisogno delle relazioni.\n");
+        System.out.println(
+                "scenari di lettura intensiva in cui è noto anticipatamente di aver bisogno delle relazioni.\n");
         System.out.println("In termini di utilizzo:");
         System.out.println("- JOIN FETCH è pratico per query specifiche scritte in JPQL.");
         System.out.println("- ENTITY GRAPH offre un modo dichiarativo ed elegante per applicare profili");
