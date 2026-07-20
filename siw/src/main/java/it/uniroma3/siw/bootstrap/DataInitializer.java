@@ -129,7 +129,7 @@ public class DataInitializer implements CommandLineRunner {
             t2.getSquadre().add(sq3);
 
             Torneo tSperimentale = new Torneo();
-            tSperimentale.setNome("Torneo Sperimentale JPA");
+            tSperimentale.setNome("Torneo Test JPA");
             tSperimentale.setAnno(2026);
             tSperimentale.setDescrizione("Torneo con 200 partite per testare le prestazioni JPA.");
             tSperimentale.getSquadre().add(sq1);
