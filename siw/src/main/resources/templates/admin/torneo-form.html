@@ -5,14 +5,14 @@
     <header th:replace="~{layout :: headbar}"></header>
 
     <main class="container">
-        <!-- Il titolo cambia a seconda se l'ID esiste o no -->
+       
         <h1 th:text="${torneo.id == null ? 'Nuovo Torneo' : 'Modifica Torneo'}">Gestione Torneo</h1>
 
     <div class="form-container">
-        <!-- Invia i dati tramite POST all'URL /admin/tornei/salva -->
+        
         <form th:action="@{/admin/tornei/salva}" th:object="${torneo}" method="post">
             
-            <!-- Questo campo nascosto è VITALE: dice a Spring l'ID del torneo da modificare -->
+            
             <input type="hidden" th:field="*{id}" />
 
             <div class="form-group mb-20">

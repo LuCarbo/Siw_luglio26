@@ -3,18 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Login - Tornei Amatoriali</title>
-    <!-- Colleghiamo il foglio di stile esterno -->
     <link rel="stylesheet" th:href="@{/style.css}">
 </head> 
 <body>
     <header th:replace="~{layout :: headbar}"></header>
 
-
-    <!-- Usiamo la classe .login-container del nuovo CSS -->
     <div class="login-container">
         <h1>Accedi al Sistema</h1>
         
-        <!-- Messaggi di errore/logout -->
+        
         <div th:if="${param.error}" style="color: red; text-align: center; margin-bottom: 15px;">
             Username o password non validi.
         </div>
@@ -22,7 +19,7 @@
             Disconnessione avvenuta con successo.
         </div>
 
-        <!-- Form con le nuove classi CSS -->
+        
         <form th:action="@{/login}" method="post">
             <div class="form-group mb-20">
                 <label for="username">Username</label>

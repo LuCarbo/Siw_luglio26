@@ -24,7 +24,6 @@
             ← Torna all'elenco tornei
         </a>
 
-        <!-- Intestazione torneo -->
         <section class="tournament-header mb-30">
             <h1 th:text="${torneo.nome}">Nome torneo</h1>
 
@@ -34,7 +33,7 @@
             </p>
         </section>
 
-        <!-- Azioni disponibili solo agli amministratori -->
+         <!-- Visibile solo agli amministratori -->
         <section sec:authorize="hasAuthority('ADMIN')" class="admin-toolbar d-flex flex-wrap gap-12 align-items-center mb-30">
             <a th:href="@{/admin/tornei/{id}/modifica(id=${torneo.id})}" class="btn btn-secondary text-center">
                 Modifica Torneo
@@ -59,7 +58,7 @@
             </form>
         </section>
 
-        <!-- Classifica (Versione Step 1 - Solo Punti) -->
+        <!-- Classifica -->
         <section class="tournament-section">
             <div class="section-heading d-flex align-items-baseline justify-content-between gap-15 mb-10">
                 <h2>Classifica</h2>
@@ -168,7 +167,7 @@
 
                     </div>
 
-                    <!-- Azione disponibile solo agli amministratori -->
+                    <!-- Visibile solo agli amministratori -->
                     <div sec:authorize="hasAuthority('ADMIN')"
                          class="match-admin-actions mt-15">
 

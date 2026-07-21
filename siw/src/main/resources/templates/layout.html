@@ -5,19 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Titolo della pagina (dinamico) -->
     <title th:text="${titolo}">Titolo App</title>
 
-    <!-- Caricamento del tuo CSS personalizzato -->
-    <link rel="stylesheet" th:href="@{/style.css}">
 
-    <!-- Caricamento di Tailwind CSS -->
+    <link rel="stylesheet" th:href="@{/style.css}">
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Caricamento Font Inter (Google Fonts) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Eventuali stili di base globali aggiuntivi -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -29,10 +24,6 @@
 
 <body>
 
-    <!-- =========================================================================
-         FRAGMENT: headbar
-         Navbar globale da includere in cima ad ogni <body>
-         ========================================================================= -->
     <header th:fragment="headbar" class="navbar">
         <div class="navbar-content d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center gap-15">
@@ -41,13 +32,12 @@
             </div>
 
             <div class="user-session d-flex align-items-center gap-15" style="color: white;">
-                <!-- Visibile soltanto a chi NON è autenticato -->
+                
                 <a sec:authorize="isAnonymous()" th:href="@{/login}" class="btn text-center"
                     style="background-color: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4);">
                     Accedi
                 </a>
 
-                <!-- Visibile soltanto a chi è autenticato -->
                 <span sec:authorize="isAuthenticated()">
                     Benvenuto, <strong sec:authentication="name" style="color: white;">Utente</strong>!
                 </span>

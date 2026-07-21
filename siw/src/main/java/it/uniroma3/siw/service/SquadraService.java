@@ -12,11 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class SquadraService {
 
     private final SquadraRepository squadraRepository;
-    private final GiocatoreRepository giocatoreRepository;
 
-    public SquadraService(SquadraRepository squadraRepository, GiocatoreRepository giocatoreRepository) {
+    public SquadraService(SquadraRepository squadraRepository) {
         this.squadraRepository = squadraRepository;
-        this.giocatoreRepository = giocatoreRepository;
     }
 
     public Iterable<Squadra> findAll() {

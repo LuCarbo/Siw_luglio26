@@ -10,13 +10,13 @@
         </h1>
 
         <div class="form-container">
-            <!-- Alert per errore backend (se presente) -->
+
             <div th:if="${erroreSquadre}" class="alert alert-danger" style="color: red; margin-bottom: 15px;" th:text="${erroreSquadre}"></div>
             
             <form th:action="@{/admin/partita/salva}" th:object="${partita}" method="post">
-                <!-- Necessario nel caso si stia modificando una partita -->
+
                 <input type="hidden" th:field="*{id}">
-                <!-- Stato della partita -->
+                
                 <div class="form-group mb-20">
                     <label for="stato">Stato Partita</label>
                     <select id="stato" class="form-control" th:field="*{stato}" required>
