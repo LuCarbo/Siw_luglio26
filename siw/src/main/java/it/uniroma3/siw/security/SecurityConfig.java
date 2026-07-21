@@ -19,12 +19,10 @@ public class SecurityConfig {
                 this.customOAuth2UserService = customOAuth2UserService;
         }
 
-        // METODO NUOVO: Dice a Spring Security di ignorare le risorse statiche
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
                                 .authorizeHttpRequests(auth -> auth
-                                                // 1. ROTTE PUBBLICHE
                                                 .requestMatchers(
                                                                 "/",
                                                                 "/tornei",
@@ -43,10 +41,8 @@ public class SecurityConfig {
                                                                 "/error")
                                                 .permitAll()
 
-                                                // 2. ROTTE ADMIN
                                                 .requestMatchers("/admin/**").hasAuthority(RuoloUtente.ADMIN.name())
 
-                                                // 3. TUTTO IL RESTO RICHIEDE IL LOGIN
                                                 .anyRequest().authenticated())
                                 .formLogin(form -> form
                                                 .loginPage("/login")
@@ -61,7 +57,6 @@ public class SecurityConfig {
                                                 .userInfoEndpoint(userInfo -> userInfo
                                                                 .userService(customOAuth2UserService))
                                                 .defaultSuccessUrl("/", true))
-                                // Disabilitiamo il CSRF (fondamentale per le chiamate React)
                                 .csrf(csrf -> csrf.disable());
 
                 return http.build();

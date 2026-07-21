@@ -19,30 +19,23 @@ public class Commento {
     @Column(name = "data_creazione", nullable = false, updatable = false)
     private LocalDateTime dataCreazione;
 
-
     @Column(columnDefinition = "BYTEA")
     private byte[] immagine;
 
-    // Relazione: un commento appartiene a un utente (autore)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "utente_id", nullable = false)
     private Utente autore;
 
-    // Relazione: un commento è riferito a una specifica partita
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "partita_id", nullable = false)
     private Partita partita;
 
-    // Metodo eseguito automaticamente da Hibernate prima di salvare nel DB per la prima volta
     @PrePersist
     protected void onCreate() {
         this.dataCreazione = LocalDateTime.now();
     }
 
-
-    // ----------- GETTER E SETTER -----------
-    
     public byte[] getImmagine() {
         return immagine;
     }
@@ -51,8 +44,7 @@ public class Commento {
         this.immagine = immagine;
     }
 
-    // --- METODO PER THYMELEAF ---
-    @Transient // Non viene salvato nel DB
+    @Transient
     public String getImmagineBase64() {
         if (this.immagine != null && this.immagine.length > 0) {
             return Base64.getEncoder().encodeToString(this.immagine);
@@ -100,5 +92,4 @@ public class Commento {
         this.partita = partita;
     }
 
-    
 }

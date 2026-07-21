@@ -7,21 +7,18 @@ public class ClassificaSquadra implements Comparable<ClassificaSquadra> {
 
     public ClassificaSquadra(Squadra squadra) {
         this.squadra = squadra;
-        this.punti = 0; // Si parte sempre da 0 punti
+        this.punti = 0;
     }
 
-    // Unico metodo che ci serve per ora per aggiornare la classifica
     public void aggiungiPunti(int puntiDaAggiungere) {
         this.punti += puntiDaAggiungere;
     }
 
-    // Ordina la lista confrontando SOLO i punti (dal più grande al più piccolo)
     @Override
     public int compareTo(ClassificaSquadra altra) {
         return Integer.compare(altra.getPunti(), this.punti);
     }
 
-    // --- GETTER E SETTER ---
     public Squadra getSquadra() {
         return squadra;
     }

@@ -22,11 +22,11 @@ public class SquadraController {
         return "squadre";
     }
 
-    // Rotta pubblica per vedere i dettagli e i giocatori di una squadra
+    // visualizzazione squadra e giocatori
     @GetMapping("/squadra/{id}")
     public String getSquadra(@PathVariable("id") Long id, Model model) {
         Squadra squadra = squadraService.findById(id);
         model.addAttribute("squadra", squadra);
-        return "squadra"; // Rimanda a squadra.html
+        return "squadra";
     }
 }

@@ -20,23 +20,22 @@ public class CommentoService {
     private final PartitaRepository partitaRepository;
     private final UtenteRepository utenteRepository;
 
-    public CommentoService(CommentoRepository commentoRepository, 
-                           PartitaRepository partitaRepository, 
-                           UtenteRepository utenteRepository) {
+    public CommentoService(CommentoRepository commentoRepository,
+            PartitaRepository partitaRepository,
+            UtenteRepository utenteRepository) {
         this.commentoRepository = commentoRepository;
         this.partitaRepository = partitaRepository;
         this.utenteRepository = utenteRepository;
     }
 
-    // Operazione di SOLA LETTURA (ottimizzazione delle performance richiesta al punto 7)
     @Transactional(readOnly = true)
     public List<Commento> findByPartitaId(Partita partita) {
         return commentoRepository.findByPartitaOrderByDataCreazioneDesc(partita);
     }
 
-    // Operazione di SCRITTURA
     @Transactional
-    public Commento aggiungiCommento(Long partitaId, Long utenteId, String testo, MultipartFile fileImmagine) throws IOException {
+    public Commento aggiungiCommento(Long partitaId, Long utenteId, String testo, MultipartFile fileImmagine)
+            throws IOException {
         Partita partita = partitaRepository.findById(partitaId)
                 .orElseThrow(() -> new RuntimeException("Partita non trovata"));
         Utente autore = utenteRepository.findById(utenteId)
@@ -47,7 +46,6 @@ public class CommentoService {
         commento.setPartita(partita);
         commento.setAutore(autore);
 
-        // SALVATAGGIO DEI BYTE NEL DB
         if (fileImmagine != null && !fileImmagine.isEmpty()) {
             commento.setImmagine(fileImmagine.getBytes());
         }
@@ -55,24 +53,22 @@ public class CommentoService {
         return commentoRepository.save(commento);
     }
 
-    // Operazione di SCRITTURA con VALIDAZIONE BUSINESS
     @Transactional
-    public Commento modificaCommento(Long commentoId, Long utenteIdRichiedente, String nuovoTesto, MultipartFile nuovaImmagine, boolean rimuoviImmagine) throws IOException {
+    public Commento modificaCommento(Long commentoId, Long utenteIdRichiedente, String nuovoTesto,
+            MultipartFile nuovaImmagine, boolean rimuoviImmagine) throws IOException {
         Commento commento = commentoRepository.findById(commentoId)
                 .orElseThrow(() -> new RuntimeException("Commento non trovato"));
 
         if (!commento.getAutore().getId().equals(utenteIdRichiedente)) {
-            throw new RuntimeException("Operazione non autorizzata: non puoi modificare il commento di un altro utente.");
+            throw new RuntimeException(
+                    "Operazione non autorizzata: non puoi modificare il commento di un altro utente.");
         }
 
         commento.setTesto(nuovoTesto);
 
-        // GESTIONE IMMAGINE IN MODIFICA
         if (rimuoviImmagine) {
-            // L'utente ha esplicitamente richiesto di rimuovere l'immagine
             commento.setImmagine(null);
         } else if (nuovaImmagine != null && !nuovaImmagine.isEmpty()) {
-            // L'utente ha caricato una nuova immagine, che sovrascriverà quella vecchia (se presente)
             commento.setImmagine(nuovaImmagine.getBytes());
         }
 

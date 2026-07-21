@@ -1,8 +1,7 @@
 package it.uniroma3.siw.model;
 
-import jakarta.persistence.*; // Se usi Spring Boot 3.x (altrimenti usa javax.persistence.* per Spring Boot 2.x)
+import jakarta.persistence.*;
 import java.util.*;
-
 
 @Entity
 @Table(name = "tornei")
@@ -21,19 +20,14 @@ public class Torneo {
     @Column(columnDefinition = "TEXT")
     private String descrizione;
 
-    //Relazione con Squadre
+    // Relazione con Squadre
     @ManyToMany
-    @JoinTable(
-        name = "torneo_squadra", 
-        joinColumns = @JoinColumn(name = "torneo_id"), 
-        inverseJoinColumns = @JoinColumn(name = "squadra_id")
-    )
+    @JoinTable(name = "torneo_squadra", joinColumns = @JoinColumn(name = "torneo_id"), inverseJoinColumns = @JoinColumn(name = "squadra_id"))
     private List<Squadra> squadre = new ArrayList<>();
 
     // Relazione con Partita
     @OneToMany(mappedBy = "torneo", cascade = CascadeType.ALL)
     private List<Partita> partite = new ArrayList<>();
-
 
     public Long getId() {
         return id;
@@ -83,5 +77,4 @@ public class Torneo {
         this.partite = partite;
     }
 
-    
 }

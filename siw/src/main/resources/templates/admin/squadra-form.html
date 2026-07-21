@@ -51,6 +51,29 @@
             </form>
         </div>
 
+        <div th:if="${squadra.id != null}" class="form-container mt-20">
+            <h2>Giocatori della Squadra</h2>
+            <ul class="mb-20">
+                <li th:each="giocatore : ${squadra.giocatori}" class="d-flex align-items-center justify-content-between mb-10">
+                    <span th:text="${giocatore.nome} + ' ' + ${giocatore.cognome} + ' (' + ${giocatore.ruolo} + ')'">Nome Giocatore</span>
+                    <a th:href="@{/admin/squadre/{squadraId}/giocatori/{giocatoreId}/rimuovi(squadraId=${squadra.id}, giocatoreId=${giocatore.id})}" class="btn btn-secondary btn-sm">Rimuovi</a>
+                </li>
+            </ul>
+
+            <hr>
+
+            <h3>Aggiungi Giocatore Svincolato</h3>
+            <form th:action="@{/admin/squadre/{id}/giocatori/esistente(id=${squadra.id})}" method="post" class="mb-20">
+                <div class="form-group">
+                    <select name="giocatoreId" class="form-control" required>
+                        <option value="" disabled selected>-- Seleziona un giocatore --</option>
+                        <option th:each="g : ${giocatoriSvincolati}" th:value="${g.id}" th:text="${g.nome} + ' ' + ${g.cognome}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mt-10">Aggiungi</button>
+            </form>
+        </div>
+
     </main>
 
 </body>

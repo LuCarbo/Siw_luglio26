@@ -8,6 +8,6 @@ public class AuthController {
 
     @GetMapping("/login")
     public String mostraFormLogin() {
-        return "login"; // Restituisce il template login.html
+        return "login";
     }
 }

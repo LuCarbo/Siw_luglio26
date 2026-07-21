@@ -31,21 +31,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         try {
             return processOAuth2User(userRequest, oAuth2User);
         } catch (Exception ex) {
-            // Log the exception
             throw new OAuth2AuthenticationException(ex.getMessage());
         }
     }
 
     private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oAuth2User) {
-        String providerId = oAuth2User.getAttribute("sub"); // Google returns "sub" as the unique ID
+        String providerId = oAuth2User.getAttribute("sub");
         String email = oAuth2User.getAttribute("email");
-        String name = oAuth2User.getAttribute("name"); // Google name (e.g. Mario Rossi)
+        String name = oAuth2User.getAttribute("name");
 
         if (email == null) {
             throw new RuntimeException("Email non trovata dall'OAuth2 provider");
         }
 
-        // Se il nome non è presente, usiamo l'email (o la prima parte dell'email)
+        // Se il nome non è presente, uso l'email
         if (name == null || name.trim().isEmpty()) {
             name = email.split("@")[0];
         }
@@ -55,18 +54,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         if (userOptional.isPresent()) {
             utente = userOptional.get();
-            // Aggiorniamo l'username con il nome Google per mostrarlo al posto della mail
+            // Username con il nome Google
             utente.setUsername(name);
             utente = utenteRepository.save(utente);
         } else {
-            // Controlliamo se esiste già un utente con questa email registrato localmente
+            // L'utente esiste già con password locale, potremmo collegare l'account
             Optional<Utente> localUser = utenteRepository.findByUsername(email);
             if (localUser.isPresent()) {
-                // L'utente esiste già con password locale, potremmo collegare l'account
+                // L'utente esiste già con password locale
                 utente = localUser.get();
                 utente.setProvider(AuthProvider.GOOGLE);
                 utente.setProviderId(providerId);
-                utente.setUsername(name); // Sovrascriviamo l'email con il nome
+                utente.setUsername(name);
                 utente = utenteRepository.save(utente);
             } else {
                 // Registriamo un nuovo utente
@@ -88,8 +87,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return new DefaultOAuth2User(
                 Collections.singletonList(authority),
                 attributes,
-                "name" // Usa 'name' come chiave principale così sec:authentication="name" mostra il
-                       // nome!
-        );
+                "name");
     }
 }

@@ -1,5 +1,6 @@
 package it.uniroma3.siw.controller.rest;
 
+import it.uniroma3.siw.model.Giocatore;
 import it.uniroma3.siw.service.GiocatoreService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,22 +21,27 @@ public class GiocatoreRestController {
     }
 
     @GetMapping
-    public List<GiocatoreDTO> getAllGiocatori() {
-        // Recupera tutti i giocatori dal DB e li trasforma in un formato leggero per React
-        return StreamSupport.stream(giocatoreService.findAll().spliterator(), false)
+    public List<GiocatoreDTO> getAllGiocatori(@RequestParam(value = "squadraId", required = false) Long squadraId) {
+        Iterable<Giocatore> giocatori;
+        if (squadraId != null) {
+            giocatori = giocatoreService.findBySquadraId(squadraId);
+        } else {
+            giocatori = giocatoreService.findAll();
+        }
+
+        return StreamSupport.stream(giocatori.spliterator(), false)
                 .map(g -> new GiocatoreDTO(
                         g.getId(),
                         g.getNome(),
                         g.getCognome(),
                         g.getRuolo(),
                         g.getSquadra() != null ? g.getSquadra().getNome() : "Svincolato",
-                        g.getAltezza()
-                ))
+                        g.getAltezza()))
                 .collect(Collectors.toList());
     }
 
     // --- CLASSE DTO (Data Transfer Object) ---
-    // Serve a inviare a React solo le stringhe ed evitare che Spring vada in loop 
+    // Serve a inviare a React solo le stringhe ed evitare che Spring vada in loop
     // infinito cercando di convertire l'intera entità Squadra
     public static class GiocatoreDTO {
         public Long id;

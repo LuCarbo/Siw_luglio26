@@ -11,25 +11,20 @@ import java.util.Optional;
 
 public interface TorneoRepository extends CrudRepository<Torneo, Long> {
 
-    // ESEMPIO DI "QUERY METHOD" (Spring genera la query automaticamente)
-    // Cerca tutti i tornei di un determinato anno
-    List<Torneo> findByAnno(Integer anno);
+    /* METODI PER TEST SPERIMENTALE (N+1) */
 
-    // Cerca un torneo ignorando le maiuscole/minuscole
     List<Torneo> findByNomeContainingIgnoreCase(String nome);
 
-    // --- METODI PER L'ANALISI SPERIMENTALE ---
-    
-    // Strategia B: Join Fetch
+    // Join Fetch
     @Query("SELECT t FROM Torneo t " +
-           "LEFT JOIN FETCH t.partite p " +
-           "LEFT JOIN FETCH p.squadraCasa " +
-           "LEFT JOIN FETCH p.squadraTrasferta " +
-           "WHERE t.id = :id")
+            "LEFT JOIN FETCH t.partite p " +
+            "LEFT JOIN FETCH p.squadraCasa " +
+            "LEFT JOIN FETCH p.squadraTrasferta " +
+            "WHERE t.id = :id")
     Optional<Torneo> findByIdWithJoinFetch(@Param("id") Long id);
 
-    // Strategia C: EntityGraph
-    @EntityGraph(attributePaths = {"partite", "partite.squadraCasa", "partite.squadraTrasferta"})
+    // EntityGraph
+    @EntityGraph(attributePaths = { "partite", "partite.squadraCasa", "partite.squadraTrasferta" })
     @Query("SELECT t FROM Torneo t WHERE t.id = :id")
     Optional<Torneo> findByIdWithEntityGraph(@Param("id") Long id);
 }

@@ -6,7 +6,6 @@ import java.util.Optional;
 
 public interface UtenteRepository extends CrudRepository<Utente, Long> {
 
-    // Fondamentale quando implementeremo il login o Spring Security
     Optional<Utente> findByUsername(String username);
 
     Optional<Utente> findByProviderId(String providerId);

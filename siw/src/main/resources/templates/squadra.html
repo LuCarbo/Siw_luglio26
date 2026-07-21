@@ -30,7 +30,8 @@
         <h1 th:text="${squadra.nome}">Nome squadra</h1>
 
         <!-- Azioni disponibili solo agli amministratori -->
-        <section sec:authorize="hasAuthority('ADMIN')" class="admin-toolbar d-flex flex-wrap gap-12 align-items-center mb-30">
+        <section sec:authorize="hasAuthority('ADMIN')"
+            class="admin-toolbar d-flex flex-wrap gap-12 align-items-center mb-30">
             <a th:href="@{/admin/squadre/{id}/modifica(id=${squadra.id})}" class="btn btn-secondary text-center">
                 Modifica Squadra
             </a>
@@ -62,11 +63,6 @@
 
     </main>
 
-    <!--
-        Questo script NON deve essere analizzato da Thymeleaf:
-        contiene JSX di React, che altrimenti verrebbe interpretato
-        erroneamente come HTML.
-    -->
     <script type="text/babel" th:inline="none">
         /*<![CDATA[*/
 

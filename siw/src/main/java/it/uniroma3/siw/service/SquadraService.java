@@ -32,19 +32,6 @@ public class SquadraService {
         return squadraRepository.save(squadra);
     }
 
-    // --- LOGICA DI BUSINESS ---
-
-    @Transactional
-    public Giocatore aggiungiGiocatore(Long squadraId, Giocatore nuovoGiocatore) {
-        Squadra squadra = findById(squadraId);
-
-        // Collega il giocatore alla squadra
-        nuovoGiocatore.setSquadra(squadra);
-
-        // Salva il giocatore (Hibernate lo aggiungerà anche alla lista della squadra)
-        return giocatoreRepository.save(nuovoGiocatore);
-    }
-
     @Transactional
     public void deleteById(Long id) {
         squadraRepository.deleteById(id);

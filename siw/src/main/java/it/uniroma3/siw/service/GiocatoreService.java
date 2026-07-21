@@ -32,4 +32,12 @@ public class GiocatoreService {
     public Giocatore findById(Long id) {
         return giocatoreRepository.findById(id).orElseThrow(() -> new RuntimeException("Giocatore non trovato"));
     }
+
+    public Iterable<Giocatore> findBySquadraId(Long squadraId) {
+        return giocatoreRepository.findBySquadraId(squadraId);
+    }
+
+    public Iterable<Giocatore> findSvincolati() {
+        return giocatoreRepository.findBySquadraIsNull();
+    }
 }
