@@ -2,7 +2,7 @@
    1. PALETTE E VARIABILI GLOBALI
    ========================================= */
 
-   :root {
+:root {
     --primario: #1a365d;
     --secondario: #2b6cb0;
     --accento: #d97706;
@@ -112,49 +112,38 @@ a:hover {
     cursor: pointer;
     font-size: 15px;
     font-weight: 700;
+    color: white;
     transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
 }
 
 .btn-primary {
     background-color: var(--secondario);
-    color: white;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
     background-color: var(--primario);
-    color: white;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
+
 .btn-secondary {
     background-color: var(--testo-secondario);
-    color: white;
 }
 
 .btn-secondary:hover {
-    transform: translateY(-2px);
     background-color: var(--testo-principale);
-    color: white;
 }
 
 .btn-danger {
     background-color: #e53e3e;
-    color: white;
 }
 
 .btn-danger:hover {
-    transform: translateY(-2px);
     background-color: var(--errore);
-    color: white;
 }
-
-
-
-
-
-
-
-
 
 /* =========================================
    5. FORM E CAMPI
@@ -168,8 +157,6 @@ a:hover {
     background: var(--sfondo-card);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
-
-
 
 .form-actions {
     margin-top: 25px;
@@ -258,12 +245,9 @@ tbody tr:hover {
     background-color: #f7fafc;
 }
 
-
 /* =========================================
    7. CARD E STATI VUOTI
    ========================================= */
-
-
 
 .card {
     padding: 25px;
@@ -272,12 +256,6 @@ tbody tr:hover {
     border-radius: 10px;
     background: var(--sfondo-card);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
 }
 
 .empty-state {
@@ -301,12 +279,8 @@ tbody tr:hover {
     color: var(--testo-secondario);
 }
 
-
-
-
-
 /* =========================================
-   9. LOGIN
+   8. LOGIN
    ========================================= */
 
 .login-container {
@@ -326,22 +300,9 @@ tbody tr:hover {
     text-align: center;
 }
 
-
 /* =========================================
-   10. HOME / LISTA TORNEI
+   9. HOME / LISTA TORNEI
    ========================================= */
-
-
-
-
-
-
-
-
-
-
-
-
 
 .admin-panel,
 .admin-toolbar {
@@ -359,19 +320,14 @@ tbody tr:hover {
     color: #7b341e;
 }
 
-
-
 .admin-actions .btn {
     padding: 9px 15px;
     font-size: 14px;
 }
 
-
 /* =========================================
-   11. DETTAGLIO TORNEO
+   10. DETTAGLIO TORNEO
    ========================================= */
-
-
 
 .tournament-description {
     max-width: 750px;
@@ -383,8 +339,6 @@ tbody tr:hover {
 .tournament-section {
     margin-top: 40px;
 }
-
-
 
 .section-heading h2 {
     margin: 0;
@@ -456,10 +410,6 @@ tbody tr:hover {
     font-size: 0.9rem;
 }
 
-
-
-
-
 .team-link {
     color: var(--primario);
     font-weight: 700;
@@ -483,25 +433,14 @@ tbody tr:hover {
     color: var(--bordo);
 }
 
-
-
 .match-admin-actions {
     padding-top: 12px;
     border-top: 1px solid var(--bordo);
 }
 
-
-
-
-
-
 /* =========================================
-   12. DETTAGLIO PARTITA E COMMENTI
+   11. DETTAGLIO PARTITA E COMMENTI
    ========================================= */
-
-
-
-
 
 /*
   Da usare solo nella pagina partita.html,
@@ -531,40 +470,100 @@ tbody tr:hover {
     font-size: 2rem;
 }
 
-
-
 /* =========================================
-   13. UTILITY CLASSES
+   12. UTILITY CLASSES
    ========================================= */
 
-.d-flex { display: flex !important; }
-.d-inline-flex { display: inline-flex !important; }
-.flex-wrap { flex-wrap: wrap !important; }
-.flex-column { flex-direction: column !important; }
-.align-items-center { align-items: center !important; }
-.align-items-baseline { align-items: baseline !important; }
-.justify-content-center { justify-content: center !important; }
-.justify-content-between { justify-content: space-between !important; }
-.justify-content-end { justify-content: flex-end !important; }
+.d-flex {
+    display: flex !important;
+}
 
-.gap-12 { gap: 12px !important; }
-.gap-15 { gap: 15px !important; }
-.gap-20 { gap: 20px !important; }
+.d-inline-flex {
+    display: inline-flex !important;
+}
 
-.mb-10 { margin-bottom: 10px !important; }
-.mb-15 { margin-bottom: 15px !important; }
-.mb-20 { margin-bottom: 20px !important; }
-.mb-25 { margin-bottom: 25px !important; }
-.mb-30 { margin-bottom: 30px !important; }
-.mt-15 { margin-top: 15px !important; }
-.mt-20 { margin-top: 20px !important; }
+.flex-wrap {
+    flex-wrap: wrap !important;
+}
 
-.text-center { text-align: center !important; }
-.text-left { text-align: left !important; }
-.text-right { text-align: right !important; }
+.flex-column {
+    flex-direction: column !important;
+}
+
+.align-items-center {
+    align-items: center !important;
+}
+
+.align-items-baseline {
+    align-items: baseline !important;
+}
+
+.justify-content-center {
+    justify-content: center !important;
+}
+
+.justify-content-between {
+    justify-content: space-between !important;
+}
+
+.justify-content-end {
+    justify-content: flex-end !important;
+}
+
+.gap-12 {
+    gap: 12px !important;
+}
+
+.gap-15 {
+    gap: 15px !important;
+}
+
+.gap-20 {
+    gap: 20px !important;
+}
+
+.mb-10 {
+    margin-bottom: 10px !important;
+}
+
+.mb-15 {
+    margin-bottom: 15px !important;
+}
+
+.mb-20 {
+    margin-bottom: 20px !important;
+}
+
+.mb-25 {
+    margin-bottom: 25px !important;
+}
+
+.mb-30 {
+    margin-bottom: 30px !important;
+}
+
+.mt-15 {
+    margin-top: 15px !important;
+}
+
+.mt-20 {
+    margin-top: 20px !important;
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
 
 /* =========================================
-   14. RESPONSIVE
+   13. RESPONSIVE
    ========================================= */
 
 @media (max-width: 700px) {
@@ -589,8 +588,6 @@ tbody tr:hover {
     .section-subtitle {
         margin-top: -10px;
     }
-
-    
 
     .match-teams {
         grid-template-columns: 1fr;

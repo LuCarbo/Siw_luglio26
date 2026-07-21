@@ -10,7 +10,8 @@
     <main class="container">
 
         <!-- Bottone Indietro -->
-        <a th:href="@{/torneo/{id}(id=${partita.torneo.id})}" class="btn btn-secondary d-inline-flex align-items-center mb-25">
+        <a th:href="@{/torneo/{id}(id=${partita.torneo.id})}"
+            class="btn btn-secondary d-inline-flex align-items-center mb-25">
             ← Torna al torneo
         </a>
 
@@ -19,13 +20,13 @@
             <h1 class="mb-20">Risultato Partita</h1>
             <div class="match-teams align-items-center gap-20">
                 <h2 th:text="${partita.squadraCasa.nome}">Squadra 1</h2>
-                
+
                 <p class="risultato-partita score">
                     <span th:text="${partita.goalsHome != null ? partita.goalsHome : '0'}">0</span>
                     -
                     <span th:text="${partita.goalsAway != null ? partita.goalsAway : '0'}">0</span>
                 </p>
-                
+
                 <h2 th:text="${partita.squadraTrasferta.nome}">Squadra 2</h2>
             </div>
         </section>
@@ -38,7 +39,7 @@
                         d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
                     </path>
                 </svg>
-                Commenti dei Tifosi
+                Commenti
             </h3>
 
             <!-- FORM INSERIMENTO NUOVO COMMENTO (Visibile solo se loggati) -->
@@ -86,7 +87,7 @@
 
             <!-- LISTA DEI COMMENTI -->
             <div th:if="${#lists.isEmpty(commenti)}" class="text-center py-8">
-                <p class="text-gray-500 italic">Non ci sono ancora commenti per questa partita. Sii il primo!</p>
+                <p class="text-gray-500 italic">Non ci sono ancora commenti per questa partita </p>
             </div>
 
             <div class="space-y-6">
@@ -123,7 +124,8 @@
                     </div>
 
                     <!-- Testo del commento -->
-                    <p class="text-gray-700 text-sm leading-relaxed" th:text="${commento.testo}">Testo del commento...</p>
+                    <p class="text-gray-700 text-sm leading-relaxed" th:text="${commento.testo}">Testo del commento...
+                    </p>
 
                     <!-- IMMAGINE ALLEGATA (Visibile solo se presente) -->
                     <div th:if="${commento.immagineBase64 != null}"
