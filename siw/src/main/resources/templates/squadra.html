@@ -29,6 +29,13 @@
 
         <h1 th:text="${squadra.nome}">Nome squadra</h1>
 
+        <!-- Azioni disponibili solo agli amministratori -->
+        <section sec:authorize="hasAuthority('ADMIN')" class="admin-toolbar d-flex flex-wrap gap-12 align-items-center mb-30">
+            <a th:href="@{/admin/squadre/{id}/modifica(id=${squadra.id})}" class="btn btn-secondary text-center">
+                Modifica Squadra
+            </a>
+        </section>
+
         <section class="card">
             <p>
                 <strong>Città:</strong>
@@ -66,7 +73,6 @@
         function RosaSquadra() {
             const [giocatori, setGiocatori] = React.useState([]);
             const [testoRicerca, setTestoRicerca] = React.useState("");
-            const [minAltezza, setMinAltezza] = React.useState("");
             const [ordinamento, setOrdinamento] = React.useState("nomeAsc");
             const [caricamento, setCaricamento] = React.useState(true);
             const [errore, setErrore] = React.useState(false);
@@ -102,13 +108,7 @@
                 const nomeCompleto =
                     `${giocatore.nome} ${giocatore.cognome}`.toLowerCase();
 
-                const matchNome = nomeCompleto.includes(ricerca);
-
-                const altezzaGiocatore = giocatore.altezza || 0;
-                const altezzaMinima = parseFloat(minAltezza);
-                const matchAltezza = minAltezza === "" || isNaN(altezzaMinima) || altezzaGiocatore >= altezzaMinima;
-
-                return matchNome && matchAltezza;
+                return nomeCompleto.includes(ricerca);
             });
 
             // Ordinamento
@@ -159,16 +159,6 @@
                             onChange={(event) =>
                                 setTestoRicerca(event.target.value)
                             }
-                        />
-                        <input
-                            type="number"
-                            className="form-control"
-                            placeholder="Altezza min."
-                            style={{ maxWidth: '150px' }}
-                            value={minAltezza}
-                            onChange={(event) => setMinAltezza(event.target.value)}
-                            step="0.01"
-                            min="0"
                         />
                         <select
                             className="form-control"

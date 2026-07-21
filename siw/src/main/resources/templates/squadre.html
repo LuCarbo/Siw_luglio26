@@ -3,7 +3,7 @@
 
 <head>
 
-    <head th:replace="~{layout :: head-comune('Lista Tornei')}"></head>
+    <head th:replace="~{layout :: head-comune('Lista Squadre')}"></head>
 
 </head>
 
@@ -14,48 +14,45 @@
     <main class="container">
 
 
-        <h1>Tornei Disponibili</h1>
+        <h1>Squadre Disponibili</h1>
 
         <!-- Visibile solo agli amministratori -->
         <section sec:authorize="hasAuthority('ADMIN')" class="admin-panel mb-30">
             <strong>Pannello Admin</strong>
 
             <div class="admin-actions d-flex flex-wrap gap-12 mt-15">
-                <a th:href="@{/admin/tornei/nuovo}" class="btn btn-primary text-center">
-                    + Crea nuovo torneo
-                </a>
-
                 <a th:href="@{/admin/squadre/nuova}" class="btn btn-primary text-center">
                     + Aggiungi squadra
                 </a>
             </div>
         </section>
 
-        <!-- Messaggio se non esistono tornei -->
-        <section th:if="${#lists.isEmpty(tornei)}" class="empty-state text-center">
-            <h2>Nessun torneo disponibile</h2>
-            <p>Al momento non ci sono tornei registrati.</p>
+        <!-- Messaggio se non esistono squadre -->
+        <section th:if="${#lists.isEmpty(squadre)}" class="empty-state text-center">
+            <h2>Nessuna squadra disponibile</h2>
+            <p>Al momento non ci sono squadre registrate.</p>
         </section>
 
-        <!-- Tabella dei tornei -->
-        <table th:unless="${#lists.isEmpty(tornei)}">
+        <!-- Tabella delle squadre -->
+        <table th:unless="${#lists.isEmpty(squadre)}">
             <thead>
                 <tr>
-                    <th>Nome torneo</th>
-                    <th>Anno</th>
+                    <th>Nome Squadra</th>
+                    <th>Città</th>
+                    <th>Anno Fondazione</th>
                     <th>Dettagli</th>
                 </tr>
             </thead>
 
             <tbody>
-                <tr th:each="torneo : ${tornei}">
-                    <td th:text="${torneo.nome}">Nome Placeholder</td>
-
-                    <td th:text="${torneo.anno}">2026</td>
+                <tr th:each="squadra : ${squadre}">
+                    <td th:text="${squadra.nome}">Nome Placeholder</td>
+                    <td th:text="${squadra.citta}">Roma</td>
+                    <td th:text="${squadra.annoFondazione}">1927</td>
 
                     <td>
                         <a class="btn btn-secondary d-inline-flex align-items-center mb-25"
-                            th:href="@{/torneo/{id}(id=${torneo.id})}">
+                            th:href="@{/squadra/{id}(id=${squadra.id})}">
                             Vedi dettagli →
                         </a>
                     </td>

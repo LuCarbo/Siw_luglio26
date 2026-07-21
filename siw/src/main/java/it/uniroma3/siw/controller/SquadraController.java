@@ -16,6 +16,12 @@ public class SquadraController {
         this.squadraService = squadraService;
     }
 
+    @GetMapping("/squadre")
+    public String getAllSquadre(Model model) {
+        model.addAttribute("squadre", squadraService.findAll());
+        return "squadre";
+    }
+
     // Rotta pubblica per vedere i dettagli e i giocatori di una squadra
     @GetMapping("/squadra/{id}")
     public String getSquadra(@PathVariable("id") Long id, Model model) {

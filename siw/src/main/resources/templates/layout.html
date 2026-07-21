@@ -35,8 +35,10 @@
          ========================================================================= -->
     <header th:fragment="headbar" class="navbar">
         <div class="navbar-content d-flex align-items-center justify-content-between">
-            <a th:href="@{/}" class="fw-bold" style="font-size: 1.5rem; text-decoration: none; color: white;">SIW
-                Tornei</a>
+            <div class="d-flex align-items-center gap-15">
+                <a th:href="@{/}" class="fw-bold" style="font-size: 1.5rem; text-decoration: none; color: white;">SIW Tornei</a>
+                <a th:href="@{/squadre}" style="text-decoration: none; color: white; margin-left: 20px;">Squadre</a>
+            </div>
 
             <div class="user-session d-flex align-items-center gap-15" style="color: white;">
                 <!-- Visibile soltanto a chi NON è autenticato -->
