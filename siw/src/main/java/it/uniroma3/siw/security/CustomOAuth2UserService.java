@@ -58,7 +58,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             utente.setUsername(name);
             utente = utenteRepository.save(utente);
         } else {
-            // L'utente esiste già con password locale, potremmo collegare l'account
+            // L'utente esiste già con password locale
             Optional<Utente> localUser = utenteRepository.findByUsername(email);
             if (localUser.isPresent()) {
                 // L'utente esiste già con password locale
@@ -70,7 +70,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             } else {
                 // Registriamo un nuovo utente
                 utente = new Utente();
-                // Usiamo il nome di Google come username per la visualizzazione
+                //Nome di Google come username per la visualizzazione
                 utente.setUsername(name);
                 utente.setProvider(AuthProvider.GOOGLE);
                 utente.setProviderId(providerId);

@@ -1,8 +1,6 @@
 package it.uniroma3.siw.service;
 
-import it.uniroma3.siw.model.Giocatore;
 import it.uniroma3.siw.model.Squadra;
-import it.uniroma3.siw.repository.GiocatoreRepository;
 import it.uniroma3.siw.repository.SquadraRepository;
 
 import org.springframework.stereotype.Service;

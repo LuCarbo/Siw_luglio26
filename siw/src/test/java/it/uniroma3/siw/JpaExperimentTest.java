@@ -60,6 +60,7 @@ public class JpaExperimentTest {
         System.out.println("=======================================================\n");
     }
 
+    @SuppressWarnings("unused")
     private long executeLazyStrategy() {
         long totalTime = 0;
         for (int i = 0; i < ITERAZIONI; i++) {
@@ -82,6 +83,7 @@ public class JpaExperimentTest {
         return totalTime / ITERAZIONI;
     }
 
+    @SuppressWarnings("unused")
     private long executeJoinFetchStrategy() {
         long totalTime = 0;
         for (int i = 0; i < ITERAZIONI; i++) {
@@ -101,6 +103,7 @@ public class JpaExperimentTest {
         return totalTime / ITERAZIONI;
     }
 
+    @SuppressWarnings("unused")
     private long executeEntityGraphStrategy() {
         long totalTime = 0;
         for (int i = 0; i < ITERAZIONI; i++) {
